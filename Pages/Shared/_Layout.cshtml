@@ -10,7 +10,7 @@
     <div data-slot="sidebar-wrapper"
          id="sidebar-wrapper"
          style="--sidebar-width: 16rem; --sidebar-width-icon: 3rem"
-         class="group has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full">
+         class="group sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full @(Context.Request.Cookies["sidebarCollapsed"] == "true" ? "collapsed" : "")">
         <div class="peer text-sidebar-foreground hidden md:block"
              data-state="expanded"
              data-collapsible=""
@@ -19,18 +19,18 @@
              data-slot="sidebar"
              id="sidebar">
             <div data-slot="sidebar-gap"
-                 class="group-[.collapsed]:w-[60px] relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear group-data-[collapsible=offcanvas]:w-0 group-data-[side=right]:rotate-180 group-data-[collapsible=icon]:w-(--sidebar-width-icon)"></div>
+                 class="group-[.sidebar-wrapper.collapsed]:w-[60px] relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear group-data-[collapsible=offcanvas]:w-0 group-data-[side=right]:rotate-180 group-data-[collapsible=icon]:w-(--sidebar-width-icon)"></div>
             <div data-slot="sidebar-container"
-                 class="group-[.collapsed]:w-[60px] fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] group-data-[collapsible=icon]:w-(--sidebar-width-icon) border-r">
+                 class="group-[.sidebar-wrapper.collapsed]:w-[60px] fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] group-data-[collapsible=icon]:w-(--sidebar-width-icon) border-r">
                 <div data-sidebar="sidebar"
                      data-slot="sidebar-inner"
                      class="border-sidebar-border flex h-full w-full flex-col :rounded-lg border group-data-[variant=floating]:shadow-sm">
                     <div data-slot="sidebar-header"
                          data-sidebar="header"
-                         class="flex flex-col gap-2 p-2 group-[.collapsed]:w-fit">
+                         class="flex flex-col gap-2 p-2 group-[.sidebar-wrapper.collapsed]:w-fit">
                         <ul data-slot="sidebar-menu"
                             data-sidebar="menu"
-                            class="flex w-full min-w-0 flex-col gap-1 group-[.collapsed]:w-fit">
+                            class="flex w-full min-w-0 flex-col gap-1 group-[.sidebar-wrapper.collapsed]:w-fit">
                             <li data-slot="sidebar-menu-item"
                                 data-sidebar="menu-item"
                                 class="group/menu-item relative">
@@ -39,11 +39,11 @@
                                    data-sidebar="menu-button"
                                    data-size="lg"
                                    data-active="false"
-                                   class="group-[.collapsed]:w-fit group-[.collapsed]:h-fit group-[.collapsed]:p-0! flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-12 text-sm group-data-[collapsible=icon]:p-0!">
+                                   class="group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit group-[.sidebar-wrapper.collapsed]:p-0! flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-12 text-sm group-data-[collapsible=icon]:p-0!">
                                     <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                                         <i data-lucide="chart-column"></i>
                                     </div>
-                                    <div class="grid flex-1 text-left text-sm leading-tight group-[.collapsed]:hidden">
+                                    <div class="grid flex-1 text-left text-sm leading-tight group-[.sidebar-wrapper.collapsed]:hidden">
                                         <span class="truncate font-semibold ">Gestión de Almacenes</span><span class="truncate text-xs">Sistema Integral</span>
                                     </div>
                                 </a>
@@ -55,19 +55,19 @@
                          class="flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden">
                         <div data-slot="sidebar-group"
                              data-sidebar="group"
-                             class="relative flex w-full min-w-0 flex-col p-2 group-[.collapsed]:w-fit">
+                             class="relative flex w-full min-w-0 flex-col p-2 group-[.sidebar-wrapper.collapsed]:w-fit">
                             <div data-slot="sidebar-group-label"
                                  data-sidebar="group-label"
-                                 class="text-sidebar-foreground/70 group-[.collapsed]:hidden ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0">
+                                 class="text-sidebar-foreground/70 group-[.sidebar-wrapper.collapsed]:hidden ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0">
                                 Navegación Principal
                             </div>
                             <div data-slot="sidebar-group-content"
                                  data-sidebar="group-content"
-                                 class="w-full text-sm group-[.collapsed]:w-fit">
+                                 class="w-full text-sm group-[.sidebar-wrapper.collapsed]:w-fit">
                                 <ul data-slot="sidebar-menu"
                                     data-sidebar="menu"
-                                    class="flex w-full min-w-0 flex-col gap-1 group-[.collapsed]:w-fit">
-                                    <li data-slot="sidebar-menu-item group-[.collapsed]:w-fit group-[.collapsed]:h-fit"
+                                    class="flex w-full min-w-0 flex-col gap-1 group-[.sidebar-wrapper.collapsed]:w-fit">
+                                    <li data-slot="sidebar-menu-item"
                                         data-sidebar="menu-item"
                                         class="relative">
                                         <a href="/"
@@ -75,68 +75,47 @@
                                            data-sidebar="menu-button"
                                            data-size="default"
                                            data-active="false"
-                                           class="group-[.collapsed]:w-fit group-[.collapsed]:h-fit group-[.collapsed]:p-1 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"
+                                           class="@(ViewData["ActivePage"]?.ToString() == "Index" ? "bg-sidebar-accent text-sidebar-accent-foreground" : "") group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit group-[.sidebar-wrapper.collapsed]:p-1 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"
                                            data-state="closed">
                                             <i data-lucide="house"></i>
-                                            <span class="group-[.collapsed]:hidden">Dashboard</span>
+                                            <span class="group-[.sidebar-wrapper.collapsed]:hidden">Dashboard</span>
                                         </a>
                                     </li>
-                                    @* <li data-slot="collapsible"
+                                    <li data-slot="collapsible"
                                         data-sidebar="menu-item"
-                                        class="group/menu-item relative group/collapsible"
+                                        id="collapsible-sidebar-item-1"
+                                        class="relative group collapsible-sidebar-item-1 @(Context.Request.Cookies["isSidenavCollapsibleItem1Collapsed"] == "true" ? "collapsed" : "")"
                                         data-state="open">
                                         <button data-slot="collapsible-trigger"
                                                 data-sidebar="menu-button"
                                                 data-size="default"
                                                 data-active="false"
-                                                class="peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"
+                                                class="@(ViewData["ActivePage"] != null && ViewData["ActivePage"].ToString().Contains("Inventory") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "") group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit group-[.sidebar-wrapper.collapsed]:p-1 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"
                                                 type="button"
                                                 aria-controls="radix-_r_3b_"
                                                 aria-expanded="true"
-                                                data-state="open">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                 width="24"
-                                                 height="24"
-                                                 viewBox="0 0 24 24"
-                                                 fill="none"
-                                                 stroke="currentColor"
-                                                 stroke-width="2"
-                                                 stroke-linecap="round"
-                                                 stroke-linejoin="round"
-                                                 class="lucide lucide-package">
-                                                <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path>
-                                                <path d="M12 22V12"></path>
-                                                <path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"></path>
-                                                <path d="m7.5 4.27 9 5.15"></path>
-                                            </svg><span>Inventario</span><svg xmlns="http://www.w3.org/2000/svg"
-                                                                              width="24"
-                                                                              height="24"
-                                                                              viewBox="0 0 24 24"
-                                                                              fill="none"
-                                                                              stroke="currentColor"
-                                                                              stroke-width="2"
-                                                                              stroke-linecap="round"
-                                                                              stroke-linejoin="round"
-                                                                              class="lucide lucide-chevron-right ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90">
-                                                <path d="m9 18 6-6-6-6"></path>
-                                            </svg>
+                                                onclick="toggleSidenavCollapsibleItem(1)"
+                                                data-state="closed">
+                                            <i data-lucide="package"></i>
+                                            <span class="group-[.sidebar-wrapper.collapsed]:hidden">Inventario</span>
+                                            <i data-lucide="chevron-right" class="w-5 h-5 ml-auto transition-transform duration-200 group-[.sidebar-wrapper.collapsed]:hidden group-[.collapsible-sidebar-item-1.collapsed]:rotate-90"></i>
                                         </button>
-                                        <div data-state="open"
-                                             id="radix-_r_3b_"
+                                        <div data-state="closed"
+                                             class="group-[.sidebar-wrapper.collapsed]:hidden"
                                              data-slot="collapsible-content"
                                              style="--radix-collapsible-content-width: 31px">
                                             <ul data-slot="sidebar-menu-sub"
                                                 data-sidebar="menu-sub"
-                                                class="border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5 group-data-[collapsible=icon]:hidden">
+                                                class="flex group-[.collapsible-sidebar-item-1.collapsed]:max-h-40 max-h-0 overflow-hidden transition-all duration-200 ease-in-out border-sidebar-border mx-3.5  min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5 group-data-[collapsible=icon]:hidden">
                                                 <li data-slot="sidebar-menu-sub-item"
                                                     data-sidebar="menu-sub-item"
-                                                    class="group/menu-sub-item relative">
+                                                    class="relative">
                                                     <a href="/inventory/articles"
                                                        data-slot="sidebar-menu-sub-button"
                                                        data-sidebar="menu-sub-button"
                                                        data-size="md"
                                                        data-active="false"
-                                                       class="text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&amp;&gt;svg]:text-sidebar-accent-foreground flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground text-sm group-data-[collapsible=icon]:hidden"><span>Gestión de Artículos</span></a>
+                                                       class="@(ViewData["ActivePage"] != null && ViewData["ActivePage"].ToString().Contains("Articles") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "") flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"><span>Gestión de Artículos</span></a>
                                                 </li>
                                                 <li data-slot="sidebar-menu-sub-item"
                                                     data-sidebar="menu-sub-item"
@@ -146,7 +125,7 @@
                                                        data-sidebar="menu-sub-button"
                                                        data-size="md"
                                                        data-active="false"
-                                                       class="text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&amp;&gt;svg]:text-sidebar-accent-foreground flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground text-sm group-data-[collapsible=icon]:hidden"><span>Tipos de Inventarios</span></a>
+                                                       class="@(ViewData["ActivePage"] != null && ViewData["ActivePage"].ToString().Contains("Types") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "") flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"><span>Tipos de Inventarios</span></a>
                                                 </li>
                                                 <li data-slot="sidebar-menu-sub-item"
                                                     data-sidebar="menu-sub-item"
@@ -156,69 +135,40 @@
                                                        data-sidebar="menu-sub-button"
                                                        data-size="md"
                                                        data-active="false"
-                                                       class="text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&amp;&gt;svg]:text-sidebar-accent-foreground flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground text-sm group-data-[collapsible=icon]:hidden"><span>Gestión de Existencias</span></a>
+                                                       class="@(ViewData["ActivePage"] != null && ViewData["ActivePage"].ToString().Contains("Stock") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "") flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"><span>Gestión de Existencias</span></a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </li>
-                                    <li data-slot="sidebar-menu-item"
+                                    <li data-slot="sidebar-menu-item group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit"
                                         data-sidebar="menu-item"
-                                        class="group/menu-item relative">
+                                        class="relative">
                                         <a href="/warehouses"
                                            data-slot="sidebar-menu-button"
                                            data-sidebar="menu-button"
                                            data-size="default"
-                                           data-active="true"
-                                           class="peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"
+                                           data-active="false"
+                                           class="@(ViewData["ActivePage"]?.ToString() == "Warehouses" ? "bg-sidebar-accent text-sidebar-accent-foreground" : "") group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit group-[.sidebar-wrapper.collapsed]:p-1 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"
                                            data-state="closed">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                 width="24"
-                                                 height="24"
-                                                 viewBox="0 0 24 24"
-                                                 fill="none"
-                                                 stroke="currentColor"
-                                                 stroke-width="2"
-                                                 stroke-linecap="round"
-                                                 stroke-linejoin="round"
-                                                 class="lucide lucide-building2">
-                                                <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
-                                                <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
-                                                <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
-                                                <path d="M10 6h4"></path>
-                                                <path d="M10 10h4"></path>
-                                                <path d="M10 14h4"></path>
-                                                <path d="M10 18h4"></path>
-                                            </svg><span>Almacenes</span>
+                                            <i data-lucide="building2"></i>
+                                            <span class="group-[.sidebar-wrapper.collapsed]:hidden">Almacenes</span>
                                         </a>
                                     </li>
-                                    <li data-slot="sidebar-menu-item"
+                                    <li data-slot="sidebar-menu-item group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit"
                                         data-sidebar="menu-item"
-                                        class="group/menu-item relative">
+                                        class="relative">
                                         <a href="/transactions"
                                            data-slot="sidebar-menu-button"
                                            data-sidebar="menu-button"
                                            data-size="default"
                                            data-active="false"
-                                           class="peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"
+                                           class="@(ViewData["ActivePage"]?.ToString() == "Transactions" ? "bg-sidebar-accent text-sidebar-accent-foreground" : "") group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit group-[.sidebar-wrapper.collapsed]:p-1 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"
                                            data-state="closed">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                 width="24"
-                                                 height="24"
-                                                 viewBox="0 0 24 24"
-                                                 fill="none"
-                                                 stroke="currentColor"
-                                                 stroke-width="2"
-                                                 stroke-linecap="round"
-                                                 stroke-linejoin="round"
-                                                 class="lucide lucide-arrow-right-left">
-                                                <path d="m16 3 4 4-4 4"></path>
-                                                <path d="M20 7H4"></path>
-                                                <path d="m8 21-4-4 4-4"></path>
-                                                <path d="M4 17h16"></path>
-                                            </svg><span>Transacciones</span>
+                                            <i data-lucide="arrow-right-left"></i>
+                                            <span class="group-[.sidebar-wrapper.collapsed]:hidden">Transacciones</span>
                                         </a>
-                                    </li>*@
-                                    <li data-slot="sidebar-menu-item group-[.collapsed]:w-fit group-[.collapsed]:h-fit"
+                                    </li>
+                                    <li data-slot="sidebar-menu-item group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit"
                                         data-sidebar="menu-item"
                                         class="relative">
                                         <a href="/access-control"
@@ -226,22 +176,22 @@
                                            data-sidebar="menu-button"
                                            data-size="default"
                                            data-active="false"
-                                           class="group-[.collapsed]:w-fit group-[.collapsed]:h-fit group-[.collapsed]:p-1 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"
+                                           class="@(ViewData["ActivePage"]?.ToString() == "AccessControl" ? "bg-sidebar-accent text-sidebar-accent-foreground" : "") group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit group-[.sidebar-wrapper.collapsed]:p-1 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm"
                                            data-state="closed">
                                             <i data-lucide="shield"></i>
-                                            <span class="group-[.collapsed]:hidden">Control de Accesso</span>
+                                            <span class="group-[.sidebar-wrapper.collapsed]:hidden">Control de Accesso</span>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div data-slot="sidebar-footer group-[.collapsed]:w-fit"
+                    <div data-slot="sidebar-footer group-[.sidebar-wrapper.collapsed]:w-fit"
                          data-sidebar="footer"
                          class="flex flex-col gap-2 p-2">
                         <ul data-slot="sidebar-menu"
                             data-sidebar="menu"
-                            class="flex w-full min-w-0 flex-col gap-1 group-[.collapsed]:w-fit">
+                            class="flex w-full min-w-0 flex-col gap-1 group-[.sidebar-wrapper.collapsed]:w-fit">
                             <li data-slot="sidebar-menu-item"
                                 data-sidebar="menu-item"
                                 class="group/menu-item relative">
@@ -249,11 +199,11 @@
                                         data-sidebar="menu-button"
                                         data-size="lg"
                                         data-active="false"
-                                        class="group-[.collapsed]:w-fit group-[.collapsed]:h-fit group-[.collapsed]:p-0 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-12 text-sm group-data-[collapsible=icon]:p-0!">
+                                        class="group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit group-[.sidebar-wrapper.collapsed]:p-0 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-12 text-sm group-data-[collapsible=icon]:p-0!">
                                     <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                                         <i data-lucide="shield"></i>
                                     </div>
-                                    <div class="grid flex-1 text-left text-sm leading-tight group-[.collapsed]:hidden">
+                                    <div class="grid flex-1 text-left text-sm leading-tight group-[.sidebar-wrapper.collapsed]:hidden">
                                         <span class="truncate font-semibold ">Admin</span><span class="truncate text-xs">Sistema Activo</span>
                                     </div>
                                 </button>
@@ -264,14 +214,14 @@
             </div>
         </div>
         <main data-slot="sidebar-inset"
-              class="group-[.collapsed]:w-[94vw] transition-[width] duration-200 ease-linear bg-background relative flex w-full flex-1 flex-col md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2">
+              class="group-[.sidebar-wrapper.collapsed]:w-[94vw] transition-[width] duration-200 ease-linear bg-background relative flex w-full flex-1 flex-col md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2">
             <header class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
                 <div class="flex items-center gap-2 px-4">
-                    <button onclick="toggleCollapse()"
+                    <button onclick="toggleCollapseSidenav()"
                         data-slot="sidebar-trigger"
                             class="sidebar-toggle inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-7 -ml-1"
                             data-sidebar="trigger">
-                        <i data-lucide="panel-left"></i>
+                        <i data-lucide="panel-left" class="w-5 h-5"></i>
                     </button>
                     <div data-orientation="vertical"
                          role="none"
@@ -297,7 +247,6 @@
             </div>
         </main>
     </div>
-
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>

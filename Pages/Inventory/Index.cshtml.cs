@@ -7,6 +7,7 @@ namespace SistemaGestionInventario.Pages.Inventory
     {
         public void OnGet()
         {
+            ViewData["ActivePage"] = "Inventory";
         }
     }
 }

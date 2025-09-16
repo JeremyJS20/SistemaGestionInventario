@@ -7,6 +7,7 @@ namespace SistemaGestionInventario.Pages.Warehouse
     {
         public void OnGet()
         {
+            ViewData["ActivePage"] = "Warehouses";
         }
     }
 }
