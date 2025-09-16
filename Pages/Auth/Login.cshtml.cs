@@ -7,6 +7,7 @@ namespace SistemaGestionInventario.Pages.Auth
     {
         public void OnGet()
         {
+            ViewData["ActivePage"] = "Login";
         }
     }
 }

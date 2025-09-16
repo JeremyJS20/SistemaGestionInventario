@@ -7,6 +7,7 @@ namespace SistemaGestionInventario.Pages.Transactions
     {
         public void OnGet()
         {
+            ViewData["ActivePage"] = "Transactions";
         }
     }
 }

@@ -448,8 +448,8 @@
   .h-4 {
     height: calc(var(--spacing) * 4);
   }
-  .h-7 {
-    height: calc(var(--spacing) * 7);
+  .h-5 {
+    height: calc(var(--spacing) * 5);
   }
   .h-8 {
     height: calc(var(--spacing) * 8);
@@ -466,6 +466,9 @@
   .h-svh {
     height: 100svh;
   }
+  .max-h-0 {
+    max-height: calc(var(--spacing) * 0);
+  }
   .min-h-0 {
     min-height: calc(var(--spacing) * 0);
   }
@@ -474,6 +477,9 @@
   }
   .w-\(--sidebar-width\) {
     width: var(--sidebar-width);
+  }
+  .w-5 {
+    width: calc(var(--spacing) * 5);
   }
   .w-full {
     width: 100%;
@@ -486,10 +492,6 @@
   }
   .shrink-0 {
     flex-shrink: 0;
-  }
-  .-translate-x-px {
-    --tw-translate-x: -1px;
-    translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .translate-x-px {
     --tw-translate-x: 1px;
@@ -570,6 +572,9 @@
   .bg-border {
     background-color: var(--border);
   }
+  .bg-sidebar-accent {
+    background-color: var(--sidebar-accent);
+  }
   .bg-sidebar-primary {
     background-color: var(--sidebar-primary);
   }
@@ -631,6 +636,9 @@
   }
   .text-red-500 {
     color: var(--color-red-500);
+  }
+  .text-sidebar-accent-foreground {
+    color: var(--sidebar-accent-foreground);
   }
   .text-sidebar-foreground {
     color: var(--sidebar-foreground);
@@ -723,6 +731,10 @@
     --tw-duration: 200ms;
     transition-duration: 200ms;
   }
+  .ease-in-out {
+    --tw-ease: var(--ease-in-out);
+    transition-timing-function: var(--ease-in-out);
+  }
   .ease-linear {
     --tw-ease: linear;
     transition-timing-function: linear;
@@ -797,54 +809,59 @@
       rotate: 180deg;
     }
   }
-  .group-data-\[state\=open\]\/collapsible\:rotate-90 {
-    &:is(:where(.group\/collapsible)[data-state="open"] *) {
-      rotate: 90deg;
-    }
-  }
   .group-data-\[variant\=floating\]\:shadow-sm {
     &:is(:where(.group)[data-variant="floating"] *) {
       --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
   }
-  .group-\[\.collapsed\]\:hidden {
-    &:is(:where(.group):is(.collapsed) *) {
+  .group-\[\.collapsible-sidebar-item-1\.collapsed\]\:max-h-40 {
+    &:is(:where(.group):is(.collapsible-sidebar-item-1.collapsed) *) {
+      max-height: calc(var(--spacing) * 40);
+    }
+  }
+  .group-\[\.collapsible-sidebar-item-1\.collapsed\]\:rotate-90 {
+    &:is(:where(.group):is(.collapsible-sidebar-item-1.collapsed) *) {
+      rotate: 90deg;
+    }
+  }
+  .group-\[\.sidebar-wrapper\.collapsed\]\:hidden {
+    &:is(:where(.group):is(.sidebar-wrapper.collapsed) *) {
       display: none;
     }
   }
-  .group-\[\.collapsed\]\:h-fit {
-    &:is(:where(.group):is(.collapsed) *) {
+  .group-\[\.sidebar-wrapper\.collapsed\]\:h-fit {
+    &:is(:where(.group):is(.sidebar-wrapper.collapsed) *) {
       height: fit-content;
     }
   }
-  .group-\[\.collapsed\]\:w-\[60px\] {
-    &:is(:where(.group):is(.collapsed) *) {
+  .group-\[\.sidebar-wrapper\.collapsed\]\:w-\[60px\] {
+    &:is(:where(.group):is(.sidebar-wrapper.collapsed) *) {
       width: 60px;
     }
   }
-  .group-\[\.collapsed\]\:w-\[94vw\] {
-    &:is(:where(.group):is(.collapsed) *) {
+  .group-\[\.sidebar-wrapper\.collapsed\]\:w-\[94vw\] {
+    &:is(:where(.group):is(.sidebar-wrapper.collapsed) *) {
       width: 94vw;
     }
   }
-  .group-\[\.collapsed\]\:w-fit {
-    &:is(:where(.group):is(.collapsed) *) {
+  .group-\[\.sidebar-wrapper\.collapsed\]\:w-fit {
+    &:is(:where(.group):is(.sidebar-wrapper.collapsed) *) {
       width: fit-content;
     }
   }
-  .group-\[\.collapsed\]\:p-0 {
-    &:is(:where(.group):is(.collapsed) *) {
+  .group-\[\.sidebar-wrapper\.collapsed\]\:p-0 {
+    &:is(:where(.group):is(.sidebar-wrapper.collapsed) *) {
       padding: calc(var(--spacing) * 0);
     }
   }
-  .group-\[\.collapsed\]\:p-0\! {
-    &:is(:where(.group):is(.collapsed) *) {
+  .group-\[\.sidebar-wrapper\.collapsed\]\:p-0\! {
+    &:is(:where(.group):is(.sidebar-wrapper.collapsed) *) {
       padding: calc(var(--spacing) * 0) !important;
     }
   }
-  .group-\[\.collapsed\]\:p-1 {
-    &:is(:where(.group):is(.collapsed) *) {
+  .group-\[\.sidebar-wrapper\.collapsed\]\:p-1 {
+    &:is(:where(.group):is(.sidebar-wrapper.collapsed) *) {
       padding: calc(var(--spacing) * 1);
     }
   }
