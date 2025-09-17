@@ -2,15 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SistemaGestionInventario.Pages.Shared.Types;
 
-namespace SistemaGestionInventario.Pages.Warehouse
+namespace SistemaGestionInventario.Pages.AccessControl
 {
     public class IndexModel : PageModel
     {
         public void OnGet()
         {
-            ViewData["ActivePage"] = "Warehouses";
-            ViewData["PageRoutes"] = new List<RouteItem> { 
-                new RouteItem { Label = "Almacenes" } 
+            ViewData["ActivePage"] = "AccessControl";
+            ViewData["PageRoutes"] = new List<RouteItem> {
+                new RouteItem{Label="Control de Acceso"}
             };
         }
     }
