@@ -1,4 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@using SistemaGestionInventario.Pages.Shared.Types
+@using System.Security.Claims
+@{
+    var pageRoutes = ViewData["PageRoutes"] as List<RouteItem>;
+
+    var userAuthenticated = User.Identity?.IsAuthenticated ?? false;
+    var Username = User.FindFirstValue(ClaimTypes.Email) ?? "Usuario";
+    var Role = User.FindFirstValue(ClaimTypes.Role) ?? "Ninguno";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,7 +21,7 @@
          id="sidebar-wrapper"
          style="--sidebar-width: 16rem; --sidebar-width-icon: 3rem"
          class="group sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full @(Context.Request.Cookies["sidebarCollapsed"] == "true" ? "collapsed" : "")">
-        <div class="peer text-sidebar-foreground hidden md:block"
+        <div class="text-sidebar-foreground @(!userAuthenticated ? "hidden" : "hidden md:block")"
              data-state="expanded"
              data-collapsible=""
              data-variant="sidebar"
@@ -44,7 +54,7 @@
                                         <i data-lucide="chart-column"></i>
                                     </div>
                                     <div class="grid flex-1 text-left text-sm leading-tight group-[.sidebar-wrapper.collapsed]:hidden">
-                                        <span class="truncate font-semibold ">Gestión de Almacenes</span><span class="truncate text-xs">Sistema Integral</span>
+                                        <span class="truncate font-semibold ">Storage Management</span><span class="truncate text-xs">Sistema Integral</span>
                                     </div>
                                 </a>
                             </li>
@@ -171,7 +181,7 @@
                                     <li data-slot="sidebar-menu-item group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit"
                                         data-sidebar="menu-item"
                                         class="relative">
-                                        <a href="/access-control"
+                                        <a href="/accessControl"
                                            data-slot="sidebar-menu-button"
                                            data-sidebar="menu-button"
                                            data-size="default"
@@ -182,6 +192,20 @@
                                             <span class="group-[.sidebar-wrapper.collapsed]:hidden">Control de Accesso</span>
                                         </a>
                                     </li>
+                                    @if (userAuthenticated)
+                                    {
+                                    <li data-slot="sidebar-menu-item group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit"
+                                        data-sidebar="menu-item"
+                                        class="relative">
+                                            <a
+                                               asp-page="/auth/logout"
+                                               class="text-red-500 cursor-pointer group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit group-[.sidebar-wrapper.collapsed]:p-1 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-red-500 data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-red-500 hover:text-sidebar-accent-foreground h-8 text-sm"
+                                               data-state="closed">
+                                                <i data-lucide="log-out"></i>
+                                                <span class="group-[.sidebar-wrapper.collapsed]:hidden">Cerrar Sesión</span>
+                                            </a>
+                                    </li>
+                                    }
                                 </ul>
                             </div>
                         </div>
@@ -192,22 +216,27 @@
                         <ul data-slot="sidebar-menu"
                             data-sidebar="menu"
                             class="flex w-full min-w-0 flex-col gap-1 group-[.sidebar-wrapper.collapsed]:w-fit">
-                            <li data-slot="sidebar-menu-item"
-                                data-sidebar="menu-item"
-                                class="group/menu-item relative">
-                                <button data-slot="sidebar-menu-button"
-                                        data-sidebar="menu-button"
-                                        data-size="lg"
-                                        data-active="false"
-                                        class="group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit group-[.sidebar-wrapper.collapsed]:p-0 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-12 text-sm group-data-[collapsible=icon]:p-0!">
-                                    <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                                        <i data-lucide="shield"></i>
-                                    </div>
-                                    <div class="grid flex-1 text-left text-sm leading-tight group-[.sidebar-wrapper.collapsed]:hidden">
-                                        <span class="truncate font-semibold ">Admin</span><span class="truncate text-xs">Sistema Activo</span>
-                                    </div>
-                                </button>
-                            </li>
+                            @if (userAuthenticated)
+                            {
+                                <li data-slot="sidebar-menu-item"
+                                    data-sidebar="menu-item"
+                                    class="group/menu-item relative">
+                                    <button data-slot="sidebar-menu-button"
+                                            data-sidebar="menu-button"
+                                            data-size="lg"
+                                            data-active="false"
+                                            class="group-[.sidebar-wrapper.collapsed]:w-fit group-[.sidebar-wrapper.collapsed]:h-fit group-[.sidebar-wrapper.collapsed]:p-0 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-hidden ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! [&amp;&gt;span:last-child]:truncate [&amp;&gt;svg]:size-4 [&amp;&gt;svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-12 text-sm group-data-[collapsible=icon]:p-0!">
+                                        <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                                            <i data-lucide="user"></i>
+                                        </div>
+                                        <div class="grid flex-1 text-left text-sm leading-tight group-[.sidebar-wrapper.collapsed]:hidden">
+
+                                            <span class="truncate font-semibold ">@Username</span>
+                                            <span class="truncate text-xs">@Role</span>
+                                        </div>
+                                    </button>
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>
@@ -215,7 +244,7 @@
         </div>
         <main data-slot="sidebar-inset"
               class="group-[.sidebar-wrapper.collapsed]:w-[94vw] transition-[width] duration-200 ease-linear bg-background relative flex w-full flex-1 flex-col md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2">
-            <header class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+            <header class="@(!userAuthenticated? "hidden": "") flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
                 <div class="flex items-center gap-2 px-4">
                     <button onclick="toggleCollapseSidenav()"
                         data-slot="sidebar-trigger"
@@ -228,15 +257,29 @@
                          data-slot="separator"
                          class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mr-2 h-4"></div>
                     <nav aria-label="breadcrumb" data-slot="breadcrumb">
-                        <ol data-slot="breadcrumb-list"
+                        @if (pageRoutes != null && pageRoutes.Any())
+                           {
+                            <ol data-slot="breadcrumb-list"
                             class="text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5">
-                            <li data-slot="breadcrumb-item"
-                                class="items-center gap-1.5 hidden md:block">
-                                <a data-slot="breadcrumb-link"
-                                   class="hover:text-foreground transition-colors"
-                                   href="/">Dashboard</a>
-                            </li>
-                        </ol>
+                                @foreach (var route in pageRoutes)
+                                {
+                                    <li data-slot="breadcrumb-item"
+                                        class="items-center gap-1 flex flex-column">
+                                        @if (route.Path != null)
+                                        {
+                                            <a data-slot="breadcrumb-link"
+                                               class="hover:text-foreground transition-colors pb-1"
+                                               href="@route.Path">@route.Label</a>
+                                        } else{
+                                        <span data-slot="breadcrumb-link"
+                                           class="text-foreground pb-1">@route.Label</span>
+                                        }
+                                        <i data-lucide="chevron-right" class="w-4 h-4 @(pageRoutes.Last() == route? "hidden" : "")"></i>
+                                    </li>
+                                }
+                            </ol>
+                        }
+
                     </nav>
                 </div>
             </header>
