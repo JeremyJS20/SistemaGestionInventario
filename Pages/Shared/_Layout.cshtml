@@ -272,7 +272,7 @@
                                                href="@route.Path">@route.Label</a>
                                         } else{
                                         <span data-slot="breadcrumb-link"
-                                           class="text-foreground pb-1">@route.Label</span>
+                                           class="text-foreground pb-1">@Html.Raw(route.Label)</span>
                                         }
                                         <i data-lucide="chevron-right" class="w-4 h-4 @(pageRoutes.Last() == route? "hidden" : "")"></i>
                                     </li>
