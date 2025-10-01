@@ -16,4 +16,6 @@ public partial class Organization
     public DateTime CreateAt { get; set; }
 
     public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
+
+    public ICollection<OrganizationUser> OrganizationUsers { get; set; } = new List<OrganizationUser>();
 }

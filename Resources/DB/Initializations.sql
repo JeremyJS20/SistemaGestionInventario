@@ -67,6 +67,107 @@ values
 
 select * from OrganizationUserRoles;
 
+CREATE TABLE Permissions (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    [Key] NVARCHAR(100) NOT NULL UNIQUE,
+    Category NVARCHAR(100) NOT NULL,
+    Name NVARCHAR(200) NOT NULL
+);
+
+INSERT INTO Permissions ([Key], Category, Name) VALUES
+('ART_VIEW',   'Artículos', 'Ver Artículos'),
+('ART_EDIT',   'Artículos', 'Editar Artículos'),
+('ART_CREATE', 'Artículos', 'Crear Artículos'),
+('ART_DELETE', 'Artículos', 'Eliminar Artículos');
+
+INSERT INTO Permissions ([Key], Category, Name) VALUES
+('INVMNMNT_VIEW',   'Gestion de Articulos', 'Ver Articulos'),
+('INVMNMNT_EDIT',   'Gestion de Articulos', 'Editar Articulos'),
+('INVMNMNT_CREATE', 'Gestion de Articulos', 'Crear Articulos'),
+('INVMNMNT_DELETE', 'Gestion de Articulos', 'Eliminar Articulos');
+
+INSERT INTO Permissions ([Key], Category, Name) VALUES
+('INVTYPE_VIEW',   'Tipos de Inventario', 'Ver Tipos de Inventario'),
+('INVTYPE_EDIT',   'Tipos de Inventario', 'Editar Tipos de Inventario'),
+('INVTYPE_CREATE', 'Tipos de Inventario', 'Crear Tipos de Inventario'),
+('INVTYPE_DELETE', 'Tipos de Inventario', 'Eliminar Tipos de Inventario');
+
+INSERT INTO Permissions ([Key], Category, Name) VALUES
+('INVWHEX_VIEW',   'Gestion de Existencias', 'Ver Existencias'),
+('INVWHEX_EDIT',   'Gestion de Existencias', 'Editar Existencias'),
+('INVWHEX_CREATE', 'Gestion de Existencias', 'Crear Existencias'),
+('INVWHEX_DELETE', 'Gestion de Existencias', 'Eliminar Existencias');
+
+INSERT INTO Permissions ([Key], Category, Name) VALUES
+('WH_VIEW',   'Almacenes', 'Ver Almacenes'),
+('WH_EDIT',   'Almacenes', 'Editar Almacenes'),
+('WH_CREATE', 'Almacenes', 'Crear Almacenes'),
+('WH_DELETE', 'Almacenes', 'Eliminar Almacenes');
+
+INSERT INTO Permissions ([Key], Category, Name) VALUES
+('TRSCTN_VIEW',   'Transacciones', 'Ver Transacciones'),
+('TRSCTN_EDIT',   'Transacciones', 'Editar Transacciones'),
+('TRSCTN_CREATE', 'Transacciones', 'Crear Transacciones'),
+('TRSCTN_DELETE', 'Transacciones', 'Eliminar Transacciones');
+
+INSERT INTO Permissions ([Key], Category, Name) VALUES
+('USR_VIEW',   'Control de Acceso', 'Ver Usuarios'),
+('USR_EDIT',   'Control de Acceso', 'Editar Usuarios'),
+('USR_CREATE', 'Control de Acceso', 'Crear Usuarios'),
+('USR_DELETE', 'Control de Acceso', 'Eliminar Usuarios');
+
+INSERT INTO Permissions ([Key], Category, Name) VALUES
+('ROLE_VIEW',   'Control de Acceso', 'Ver Roles'),
+('ROLE_EDIT',   'Control de Acceso', 'Editar Roles'),
+('ROLE_CREATE', 'Control de Acceso', 'Crear Roles'),
+('ROLE_DELETE', 'Control de Acceso', 'Eliminar Roles');
+
+select * from Permissions;
+
+create table RolePermissions(
+	idRole int not null constraint fk_role_permissions foreign key references Roles(id),
+	idPermission int not null constraint fk2_role_permissions foreign key references Permissions(id)
+);
+
+insert into RolePermissions(idRole, idPermission) 
+values
+	(1, 1), 
+	(1, 13),
+	(1, 17);
+
+select * from RolePermissions;
+
 SELECT TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_TYPE = 'BASE TABLE';
+
+select
+	u.id as UserId,
+	u.Username,
+	u.Email,
+	o.id as OrganizationId,
+	o.Name as OrganizationName,
+	(
+        SELECT 
+			r.id, 
+			r.Name,
+			(
+                SELECT 
+					p.id,
+					p.Name,
+					p.[Key]
+                FROM RolePermissions rp
+                INNER JOIN Permissions p ON p.id = rp.idPermission
+                WHERE rp.idRole = r.id
+                FOR JSON PATH
+            ) AS Permissions
+        FROM Roles as r
+        INNER JOIN OrganizationUserRoles as our ON our.idOrganization = o.id
+        WHERE our.idUser = u.id
+        FOR JSON PATH
+    ) AS Roles
+from Users as u
+inner join OrganizationUsers as ou on ou.idUser = u.id
+inner join Organizations as o on o.id = ou.idOrganization
+where 
+	u.Email = 'jsjeremy4@gmail.com';

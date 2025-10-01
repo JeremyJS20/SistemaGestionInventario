@@ -18,4 +18,6 @@ public partial class User
     public string Password { get; set; } = null!;
 
     public string Status { get; set; } = null!;
+
+    public ICollection<OrganizationUser> OrganizationUsers { get; set; } = new List<OrganizationUser>();
 }

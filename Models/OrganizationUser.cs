@@ -11,7 +11,7 @@ public partial class OrganizationUser
 
     public DateTime JoinedAt { get; set; }
 
-    public virtual Organization IdOrganizationNavigation { get; set; } = null!;
+    public virtual Organization Organization { get; set; } = null!;
 
-    public virtual User IdUserNavigation { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }

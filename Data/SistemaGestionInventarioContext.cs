@@ -26,6 +26,10 @@ namespace SistemaGestionInventario.Data
 
         public virtual DbSet<User> Users { get; set; }
 
+        public virtual DbSet<Permission> Permissions { get; set; }
+
+        public virtual DbSet<RolePermission> RolePermissions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Organization>(entity =>
@@ -50,7 +54,7 @@ namespace SistemaGestionInventario.Data
 
             modelBuilder.Entity<OrganizationUser>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.IdUser, e.IdOrganization });
 
                 entity.Property(e => e.IdOrganization).HasColumnName("idOrganization");
                 entity.Property(e => e.IdUser).HasColumnName("idUser");
@@ -58,12 +62,14 @@ namespace SistemaGestionInventario.Data
                     .HasDefaultValueSql("(switchoffset(sysdatetimeoffset(),'-04:00'))")
                     .HasColumnType("datetime");
 
-                entity.HasOne(d => d.IdOrganizationNavigation).WithMany()
+                entity.HasOne(d => d.Organization)
+                    .WithMany(o => o.OrganizationUsers)
                     .HasForeignKey(d => d.IdOrganization)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk2_organization_users");
 
-                entity.HasOne(d => d.IdUserNavigation).WithMany()
+                entity.HasOne(d => d.User)
+                    .WithMany(u => u.OrganizationUsers)
                     .HasForeignKey(d => d.IdUser)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_organization_users");
@@ -106,7 +112,7 @@ namespace SistemaGestionInventario.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Roles)
+                entity.HasOne(d => d.Organization).WithMany(p => p.Roles)
                     .HasForeignKey(d => d.IdOrganization)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_roles_organizations");
@@ -134,6 +140,33 @@ namespace SistemaGestionInventario.Data
                 entity.Property(e => e.Username)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Permission>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK__Permissi__3214EC07770A02A5");
+
+                entity.HasIndex(e => e.Key, "UQ__Permissi__C41E0289352771DD").IsUnique();
+
+                entity.Property(e => e.Category).HasMaxLength(100);
+                entity.Property(e => e.Key).HasMaxLength(100);
+                entity.Property(e => e.Name).HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<RolePermission>(entity =>
+            {
+                entity.HasKey(e => new { e.IdRole, e.IdPermission });
+
+                entity.Property(e => e.IdPermission).HasColumnName("idPermission");
+                entity.Property(e => e.IdRole).HasColumnName("idRole");
+
+                entity.HasOne(d => d.Permission).WithMany()
+                    .HasForeignKey(d => d.IdPermission)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.Role).WithMany(r => r.RolePermissions)
+                    .HasForeignKey(d => d.IdRole)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             OnModelCreatingPartial(modelBuilder);
