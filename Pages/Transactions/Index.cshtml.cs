@@ -5,7 +5,7 @@ using SistemaGestionInventario.Pages.Shared.Types;
 
 namespace SistemaGestionInventario.Pages.Transactions
 {
-    [Authorize(Roles = "Test")]
+    [Authorize(Policy = "Permission.TRSCTN")]
     public class IndexModel : PageModel
     {
         public void OnGet()

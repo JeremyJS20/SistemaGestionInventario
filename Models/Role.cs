@@ -15,5 +15,7 @@ public partial class Role
 
     public bool IsAdmin { get; set; }
 
-    public virtual Organization IdOrganizationNavigation { get; set; } = null!;
+    public virtual Organization Organization { get; set; } = null!;
+
+    public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
 }

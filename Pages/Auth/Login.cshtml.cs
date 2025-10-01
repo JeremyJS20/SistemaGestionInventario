@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SistemaGestionInventario.Models;
 using SistemaGestionInventario.Pages.Shared.Types;
+using System;
 using System.Security.Claims;
 
 namespace SistemaGestionInventario.Pages.Auth
@@ -35,9 +36,6 @@ namespace SistemaGestionInventario.Pages.Auth
             }
 
             var userDb = await _context.Users.FirstOrDefaultAsync(m => m.Username == user.email || m.Email == user.email);
-            //var userDb = await _context.Users
-            //    .FromSql($"SELECT * FROM Users u WHERE (u.Username = {user.email} or u.Email = {user.email}) and u.Status = 'AC'")
-            //    .FirstOrDefaultAsync();
 
             if (userDb is null)
             {
@@ -51,11 +49,57 @@ namespace SistemaGestionInventario.Pages.Auth
                 return Page();
             }
 
+            var userDbInfo = _context.Users
+                .Where(u => u.Email == user.email)
+                .Select(u => new
+                {
+                    UserId = u.Id,
+                    u.Username,
+                    u.Email,
+                    Organizations = u.OrganizationUsers
+                        .Select(ou => new
+                        {
+                            OrganizationId = ou.Organization.Id,
+                            OrganizationName = ou.Organization.Name,
+                            Roles = ou.Organization.Roles
+                                .Where(r => r.IdOrganization == ou.IdOrganization)
+                                .Select(r => new
+                                {
+                                    RoleId = r.Id,
+                                    RoleName = r.Name,
+                                    Permissions = r.RolePermissions
+                                        .Select(rp => new
+                                        {
+                                            rp.Permission.Id,
+                                            rp.Permission.Name,
+                                            rp.Permission.Key
+                                        }).ToList()
+                                }).ToList()
+                        }).ToList()
+                })
+                .FirstOrDefault();
+
             var claims = new List<Claim>
             {
-                new(ClaimTypes.Email, user.email),
-                new(ClaimTypes.Role, "Admin")
+                new("UserId", userDbInfo!.UserId.ToString()),
+                new(ClaimTypes.Email, userDbInfo!.Email),
+                new("Username", userDbInfo!.Username),
             };
+
+            foreach (var org in userDbInfo.Organizations)
+            {
+                claims.Add(new("OrganizationId", org.OrganizationId.ToString()));
+
+                foreach (var role in org.Roles)
+                {
+                    //claims.Add(new Claim(ClaimTypes.Role, role.RoleName));
+
+                    foreach (var perm in role.Permissions)
+                    {
+                        claims.Add(new Claim("Permission", perm.Key));
+                    }
+                }
+            }
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
