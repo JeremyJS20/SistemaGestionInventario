@@ -14,4 +14,7 @@ public partial class OrganizationUser
     public virtual Organization Organization { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+
+    public ICollection<OrganizationUserRole> OrganizationUserRole { get; set; } = new List<OrganizationUserRole>();
+
 }

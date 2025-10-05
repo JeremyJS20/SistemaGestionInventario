@@ -18,4 +18,7 @@ public partial class Role
     public virtual Organization Organization { get; set; } = null!;
 
     public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
+
+    public ICollection<OrganizationUserRole> OrganizationUserRole { get; set; } = new List<OrganizationUserRole>();
+
 }

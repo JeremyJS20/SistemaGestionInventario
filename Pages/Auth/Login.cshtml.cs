@@ -84,6 +84,8 @@ namespace SistemaGestionInventario.Pages.Auth
                 new("UserId", userDbInfo!.UserId.ToString()),
                 new(ClaimTypes.Email, userDbInfo!.Email),
                 new("Username", userDbInfo!.Username),
+                new(ClaimTypes.Role, userDbInfo!.Organizations[0].Roles[0].RoleName),
+                new("SelectedOrganizationId", userDbInfo!.Organizations[0].OrganizationId.ToString()),
             };
 
             foreach (var org in userDbInfo.Organizations)

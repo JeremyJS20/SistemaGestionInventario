@@ -77,23 +77,26 @@ namespace SistemaGestionInventario.Data
 
             modelBuilder.Entity<OrganizationUserRole>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(our => new { our.IdUser, our.IdOrganization, our.IdRole }); ;
 
                 entity.Property(e => e.IdOrganization).HasColumnName("idOrganization");
                 entity.Property(e => e.IdRole).HasColumnName("idRole");
                 entity.Property(e => e.IdUser).HasColumnName("idUser");
 
-                entity.HasOne(d => d.IdOrganizationNavigation).WithMany()
+                entity.HasOne(d => d.Organization)
+                    .WithMany(r => r.OrganizationUserRole)
                     .HasForeignKey(d => d.IdOrganization)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk2_organization_user_roles");
 
-                entity.HasOne(d => d.IdRoleNavigation).WithMany()
+                entity.HasOne(d => d.Role)
+                    .WithMany(r => r.OrganizationUserRole)
                     .HasForeignKey(d => d.IdRole)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk3_organization_user_roles");
 
-                entity.HasOne(d => d.IdUserNavigation).WithMany()
+                entity.HasOne(d => d.User)
+                    .WithMany(u => u.OrganizationUserRole)
                     .HasForeignKey(d => d.IdUser)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_organization_user_roles");
