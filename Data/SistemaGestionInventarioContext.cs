@@ -30,6 +30,10 @@ namespace SistemaGestionInventario.Data
 
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
 
+        public virtual DbSet<Article> Articles { get; set; }
+
+        public virtual DbSet<Category> Categories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Organization>(entity =>
@@ -170,6 +174,24 @@ namespace SistemaGestionInventario.Data
                 entity.HasOne(d => d.Role).WithMany(r => r.RolePermissions)
                     .HasForeignKey(d => d.IdRole)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<Article>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK__Articles__3214EC07C07992B5");
+
+                entity.Property(e => e.Code).IsUnicode(false);
+                entity.Property(e => e.Description).IsUnicode(false);
+                entity.Property(e => e.Name).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK__Category__3214EC07A72F8CBA");
+
+                entity.ToTable("Category");
+
+                entity.Property(e => e.Name).IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);
