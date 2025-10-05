@@ -103,7 +103,7 @@
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold">Gestión de Usuarios</h3>
                     <a data-slot="dialog-trigger"
-                       href="/accessControl/users/new"
+                       asp-page="./Users/New"
                             class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
                             type="button"
                             aria-haspopup="dialog"
@@ -264,12 +264,12 @@
                                             <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap">
                                                 <div class="flex items-center gap-2">
                                                     <a data-slot="button"
-                                                       href="/accessControl/users/@user.Id/edit"
-                                                            class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
+                                                       asp-page="./Users/Edit" asp-route-id="@user.Id"
+                                                       class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
                                                         <i data-lucide="square-pen" class="w-4 h-4"></i>
                                                     </a>
                                                     <a data-slot="button"
-                                                       asp-page="/accessControl/users/@user.Id/delete"
+                                                       asp-page="./Users/Delete" asp-route-id="@user.Id"
                                                             class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
                                                         <i data-lucide="trash2" class="w-4 h-4"></i>
                                                     </a>
@@ -289,7 +289,7 @@
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold">Gestión de Roles</h3>
                     <a data-slot="dialog-trigger"
-                       href="/accessControl/roles/new"
+                       asp-page="./Roles/New"
                             class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
                             type="button"
                             aria-haspopup="dialog"
@@ -303,7 +303,7 @@
                 <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
                     <div data-slot="card-header" class="container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6">
                         <div data-slot="card-title" class="leading-none font-semibold">Lista de Roles</div>
-                        <div data-slot="card-description" class="text-muted-foreground text-sm">4 rol(es) definido(s)</div>
+                        <div data-slot="card-description" class="text-muted-foreground text-sm">@Model.OrganizationAccessControlPageDto.Roles.Count() rol(es) definido(s)</div>
                     </div>
                     <div data-slot="card-content" class="px-6">
                         <div data-slot="table-container" class="relative w-full overflow-x-auto">
@@ -345,12 +345,12 @@
                                             <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]">
                                                 <div class="flex items-center gap-2">
                                                     <a data-slot="button"
-                                                       href="/accessControl/roles/@role.Id/edit"
+                                                       asp-page="./Roles/Edit" asp-route-id="@role.Id"
                                                             class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
                                                         <i data-lucide="square-pen" class="w-4 h-4"></i>
                                                     </a>
                                                     <a data-slot="button"
-                                                       asp-page="/accessControl/roles/@role.Id/delete"
+                                                       asp-page="./Roles/Delete" asp-route-id="@role.Id"
                                                             class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
                                                         <i data-lucide="trash2" class="w-4 h-4"></i>
                                                     </a>
