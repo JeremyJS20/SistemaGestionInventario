@@ -20,4 +20,7 @@ public partial class User
     public string Status { get; set; } = null!;
 
     public ICollection<OrganizationUser> OrganizationUsers { get; set; } = new List<OrganizationUser>();
+
+    public ICollection<OrganizationUserRole> OrganizationUserRole { get; set; } = new List<OrganizationUserRole>();
+
 }

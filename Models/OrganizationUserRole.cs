@@ -11,9 +11,9 @@ public partial class OrganizationUserRole
 
     public int IdRole { get; set; }
 
-    public virtual Organization IdOrganizationNavigation { get; set; } = null!;
+    public virtual Organization Organization { get; set; } = null!;
 
-    public virtual Role IdRoleNavigation { get; set; } = null!;
+    public virtual Role Role { get; set; } = null!;
 
-    public virtual User IdUserNavigation { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }
