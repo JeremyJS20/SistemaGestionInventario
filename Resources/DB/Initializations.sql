@@ -30,8 +30,8 @@ create table Users(
 	id int not null identity(1,1) constraint pk_users primary key,
 	Name varchar(50) not null,
 	LastName varchar(50) not null,
-	Username varchar(50) not null,
-	Email varchar(50) not null,
+	Username varchar(50) not null UNIQUE,
+	Email varchar(50) not null UNIQUE,
 	Password varchar(max) not null,
 	Status varchar(2) not null default 'AC' constraint ck_status_users check (status in ('AC', 'IN'))
 );
@@ -122,7 +122,8 @@ INSERT INTO Permissions ([Key], Category, Name) VALUES
 ('ROLE_CREATE', 'Control de Acceso', 'Crear Roles'),
 ('ROLE_DELETE', 'Control de Acceso', 'Eliminar Roles');
 
-select * from Permissions;
+select * from Permissions where [Key] like '%USR%'; 
+select * from Permissions where [Key] like '%ROLE%'; 
 
 create table RolePermissions(
 	idRole int not null constraint fk_role_permissions foreign key references Roles(id),
@@ -131,9 +132,13 @@ create table RolePermissions(
 
 insert into RolePermissions(idRole, idPermission) 
 values
-	(1, 1), 
-	(1, 13),
-	(1, 17);
+	(1, 13), 
+	(1, 14),
+	(1, 15),
+	(1, 16),
+	(1, 18), 
+	(1, 19),
+	(1, 20);
 
 select * from RolePermissions;
 
@@ -171,3 +176,11 @@ inner join OrganizationUsers as ou on ou.idUser = u.id
 inner join Organizations as o on o.id = ou.idOrganization
 where 
 	u.Email = 'jsjeremy4@gmail.com';
+
+
+select * from Users;
+
+update Users set Username = 'jsolano2' where Id = 2;
+
+alter table Users ADD CONSTRAINT unq_user_username UNIQUE (Username);
+alter table Users ADD CONSTRAINT unq_user_email UNIQUE (Email);

@@ -19,6 +19,7 @@ namespace SistemaGestionInventario.Pages.AccessControl
 
         public OrganizationAccessControlPageDto OrganizationAccessControlPageDto { get; set; } = default!;
 
+        public IList<UserStatusEnum> Statuses { get; set; } = UserStatusEnum.GetAll();
 
         public async Task OnGetAsync()
         {
@@ -27,10 +28,11 @@ namespace SistemaGestionInventario.Pages.AccessControl
                 .Select(or => new OrganizationAccessControlPageDto
                 {
                     Users = or.OrganizationUsers
+                        .Where(or => or.User.Id != int.Parse(User.FindFirstValue("UserId")!))
                         .Select(orgUser => new UserDto
                         {
                             Id = orgUser.User.Id,
-                            Username = orgUser.User.Name,
+                            Username = orgUser.User.Username,
                             FullName = $"{orgUser.User.Name} {orgUser.User.LastName}",
                             Email = orgUser.User.Email,
                             Status = UserStatusEnum.FromCode(orgUser.User.Status).Description,
@@ -60,8 +62,8 @@ namespace SistemaGestionInventario.Pages.AccessControl
                         }).ToList(),
                     Resume = new ResumeDto
                     {
-                        TotalUsers=or.OrganizationUsers.Count(),
-                        TotalActiveUsers=or.OrganizationUsers.Where(u => u.User.Status == UserStatusEnum.AC.Code).Count(),
+                        TotalUsers=or.OrganizationUsers.Where(u => u.User.Id != int.Parse(User.FindFirstValue("UserId")!)).Count(),
+                        TotalActiveUsers=or.OrganizationUsers.Where(u => u.User.Status == UserStatusEnum.AC.Code && u.User.Id != int.Parse(User.FindFirstValue("UserId")!)).Count(),
                         TotalDefinedRoles=or.Roles.Count(),
                         TotalPermissions= _context.Permissions.Count()
                     }
