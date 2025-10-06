@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SistemaGestionInventario.Enums;
+using SistemaGestionInventario.Models;
 using SistemaGestionInventario.Pages.Shared.Types;
 using System.Security.Claims;
 
@@ -20,6 +21,8 @@ namespace SistemaGestionInventario.Pages.AccessControl
         public OrganizationAccessControlPageDto OrganizationAccessControlPageDto { get; set; } = default!;
 
         public IList<UserStatusEnum> Statuses { get; set; } = UserStatusEnum.GetAll();
+
+        public Dictionary<string, List<Permission>> SystemPermissions { get; set; } = default!;
 
         public async Task OnGetAsync()
         {
@@ -69,6 +72,11 @@ namespace SistemaGestionInventario.Pages.AccessControl
                     }
                 })
                 .FirstOrDefaultAsync();
+
+            this.SystemPermissions = await _context.Permissions
+                .Select(p => p)
+                .GroupBy(p => p.Category)
+                .ToDictionaryAsync(g => g.Key, g => g.ToList());
 
             ViewData["ActivePage"] = "AccessControl";
             ViewData["PageRoutes"] = new List<RouteItem> {
