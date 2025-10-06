@@ -42,57 +42,58 @@
                         </button>
                     </div>
                     <div class="p-4 md:p-5 space-y-4">
-                        <form>
+                        <form id="articleForm" method="post">
                             <div class="mb-5 flex justify-between gap-2">
                                 <div class="flex-1">
-                                    <label for="code" class="block mb-2 text-sm font-medium text-gray-900">Código del Artículo</label>
-                                    <input type="text" id="code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" placeholder="LAP001" required />
+                                    <label asp-for="ArticleDto.Code" class="block mb-2 text-sm font-medium text-gray-900">Código del Artículo</label>
+                                    <input asp-for="ArticleDto.Code" id="code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" placeholder="LAP001" />
+                                    <span asp-validation-for="ArticleDto.Code" class="text-red-600"></span>
                                 </div>
                                 <div class="flex-1">   
-                                    <label for="categoria" class="block mb-2 text-sm font-medium text-gray-900">Categoría</label>
-                                    <select id="categoria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5" required>
+                                    <label asp-for="ArticleDto.Category" for="categoria" class="block mb-2 text-sm font-medium text-gray-900">Categoría</label>
+                                    <select asp-items="Model.Categories" asp-for="ArticleDto.Category" id="categoria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5">
                                         <option selected disabled>Seleccionar categoria</option>
-                                        <option value="US">United States</option>
-                                        <option value="CA">Canada</option>
-                                        <option value="FR">France</option>
-                                        <option value="DE">Germany</option>
                                     </select>
+                                    <span asp-validation-for="ArticleDto.Category" class="text-red-600"></span>
                                 </div>
                             </div>
                             <div class="mb-5">
-                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nombre del Artículo</label>
-                                <input type="text" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5" placeholder="Nombre descriptivo del artículo" required />
+                                <label asp-for="ArticleDto.Name" class="block mb-2 text-sm font-medium text-gray-900">Nombre del Artículo</label>
+                                <input asp-for="ArticleDto.Name" type="text" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" placeholder="Nombre descriptivo del artículo" />
+                                <span asp-validation-for="ArticleDto.Name" class="text-red-600"></span>
                             </div>
                             <div class="mb-5">
-                                <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900">Descripción</label>
-                                <textarea id="descripcion" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500" placeholder="Descripción detallada del articulo"></textarea>
+                                <label asp-for="ArticleDto.Description" class="block mb-2 text-sm font-medium text-gray-900">Descripción</label>
+                                <textarea asp-for="ArticleDto.Description" id="descripcion" rows="4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" placeholder="Descripción detallada del articulo"></textarea>
+                                <span asp-validation-for="ArticleDto.Description" class="text-red-600"></span>
                             </div>
                             <div class="mb-5 flex justify-between gap-2">
                                 <div class="flex-1">
-                                    <label for="precio" class="block mb-2 text-sm font-medium text-gray-900">Precio</label>
-                                    <input type="number" min="0" value="0" id="precio" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5" required />
+                                    <label asp-for="ArticleDto.Price" "class="block mb-2 text-sm font-medium text-gray-900">Precio</label>
+                                    <input asp-for="ArticleDto.Price" type="number" min="0" value="0" id="precio" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" />
+                                    <span asp-validation-for="ArticleDto.Price" class="text-red-600"></span>
                                 </div>
                                 <div class="flex-1">
-                                    <label for="stock" class="block mb-2 text-sm font-medium text-gray-900">Stock Actual</label>
-                                    <input type="number" min="0" value="0" id="stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5" required />
+                                    <label asp-for="ArticleDto.Stock" class="block mb-2 text-sm font-medium text-gray-900">Stock Actual</label>
+                                    <input asp-for="ArticleDto.Stock" type="number" min="0" value="0" id="stock" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" />
+                                    <span asp-validation-for="ArticleDto.Stock" class="text-red-600"></span>
                                 </div>
                                 <div class="flex-1">
-                                    <label for="stockMin" class="block mb-2 text-sm font-medium text-gray-900">Stock Mínimo</label>
-                                    <input type="number" min="0" value="0" id="stockMin" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5" required />
+                                    <label asp-for="ArticleDto.MinimumStock" class="block mb-2 text-sm font-medium text-gray-900">Stock Mínimo</label>
+                                    <input asp-for="ArticleDto.MinimumStock" type="number" min="0" value="0" id="stockMin" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" />
+                                    <span asp-validation-for="ArticleDto.MinimumStock" class="text-red-600"></span>
                                 </div>
                             </div>
                             <div class="mb-5">
-                                <label for="estado" class="block mb-2 text-sm font-medium text-gray-900">Estado</label>
-                                <select id="estado" class="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block p-2.5" selected>
-                                    <option selected value="1">Activo</option>
-                                    <option value="0">Inactivo</option>
-                                </select>
+                                <label asp-for="ArticleDto.State" for="estado" class="block mb-2 text-sm font-medium text-gray-900">Estado</label>
+                                <select asp-items="Model.States" asp-for="ArticleDto.State" id="estado" class="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block p-2.5" selected></select>
+                                <span asp-validation-for="ArticleDto.State" class="text-red-600"></span>
                             </div>
                         </form>
                     </div>
                     <div class="flex justify-end items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
                         <button data-modal-hide="default-modal" type="button" class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-sidebar-accent hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100">Cancelar</button>
-                        <button data-modal-hide="default-modal" type="button" class="ms-3 text-white bg-primary hover:bg-sidebar-accent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Crear Artículo</button>
+                        <button id="create-btn" type="button" class="ms-3 text-white bg-primary hover:bg-sidebar-accent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Crear Artículo</button>
                     </div>
                 </div>
             </div>
@@ -145,3 +146,53 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const createBtn = document.querySelector('#create-btn');
+            let form = document.querySelector('#articleForm');
+
+            createBtn.addEventListener('click', () => {
+                form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+            })
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                let form = e.target;
+                let formData = new FormData(form);
+
+                fetch(form.action + '?handler=Endpoint', {
+                    method: 'POST',
+                    headers: {
+                      'RequestVerificationToken': formData.get('__RequestVerificationToken')
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    form.querySelectorAll('[data-valmsg-for]').forEach(el => {
+                        el.textContent = '';
+                    });
+
+                    if (result.success) {
+                        document.getElementById('successMessage').style.display = 'block';
+                    } else {
+                        for (let field in result.errors) {
+                            let msg = result.errors[field];
+                            let span = form.querySelector(`[data-valmsg-for="${field}"]`);
+                            if (span) {
+                                span.textContent = msg;
+                            }
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.error('Submit error', err);
+                });
+            });
+        });
+    </script>
+}
