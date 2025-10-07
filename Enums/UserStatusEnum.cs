@@ -31,5 +31,22 @@ namespace SistemaGestionInventario.Enums
 
             throw new ArgumentException($"No Status found with value '{code}'");
         }
+
+        public static IList<UserStatusEnum> GetAll()
+        {
+            var fields = typeof(UserStatusEnum)
+                .GetFields(BindingFlags.Public | BindingFlags.Static);
+
+            var statuses = new List<UserStatusEnum>();
+
+            foreach (var f in fields)
+            {
+                var status = f.GetValue(null) as UserStatusEnum;
+
+                statuses.Add(status!);
+            }
+
+            return statuses;
+        }
     }
 }

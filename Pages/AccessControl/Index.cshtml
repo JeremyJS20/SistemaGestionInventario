@@ -102,9 +102,8 @@
                  style="animation-duration: 0s;">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold">Gestión de Usuarios</h3>
-                    <a data-slot="dialog-trigger"
-                       asp-page="./Users/New"
-                            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                    <button data-slot="dialog-trigger"
+                            class="users-crud-modal-open-btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
                             type="button"
                             aria-haspopup="dialog"
                             aria-expanded="false"
@@ -112,7 +111,7 @@
                             data-state="closed">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                         Nuevo Usuario
-                    </a>
+                    </button>
                 </div>
                 <div data-slot="card" class="bg-card hidden text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
                     <div data-slot="card-content" class="p-4">
@@ -225,6 +224,28 @@
                                     </tr>
                                 </thead>
                                 <tbody data-slot="table-body" class="[&amp;_tr:last-child]:border-0">
+                                    @if (Model.OrganizationAccessControlPageDto.Users.Count() <= 0)
+                                    {
+                                        <tr>
+                                            <td colspan="7" class="p-8 text-center">
+                                                <div class="flex flex-col gap-3 items-center justify-center">
+                                                    <i data-lucide="user-round-x" class="w-24 h-24"></i>
+                                                    <span class="text-muted-foreground">No se encontraron usuarios</span>
+                                                    <button data-slot="dialog-trigger"
+                                                            class="users-crud-modal-open-btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                                                            type="button"
+                                                            aria-haspopup="dialog"
+                                                            aria-expanded="false"
+                                                            aria-controls="radix-_r_9_"
+                                                            data-state="closed">
+                                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                                        Nuevo Usuario
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+
                                     @foreach (var user in Model.OrganizationAccessControlPageDto.Users)
                                     {
                                         <tr id="@user.Id" data-slot="table-row" class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
@@ -242,6 +263,13 @@
                                                 @user.Email
                                             </td>
                                             <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap">
+                                                @if (user.Roles.Count() <= 0)
+                                                {
+                                                    <span data-slot="badge"
+                                                          class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-foreground [a&amp;]:hover:bg-accent [a&amp;]:hover:text-accent-foreground">
+                                                        Ninguno
+                                                    </span>
+                                                }
                                                 @foreach(var role in user.Roles)
                                                 {
                                                     <span data-slot="badge"
@@ -265,14 +293,16 @@
                                                 <div class="flex items-center gap-2">
                                                     <a data-slot="button"
                                                        asp-page="./Users/Edit" asp-route-id="@user.Id"
-                                                       class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
+                                                       class="hidden items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
                                                         <i data-lucide="square-pen" class="w-4 h-4"></i>
                                                     </a>
-                                                    <a data-slot="button"
-                                                       asp-page="./Users/Delete" asp-route-id="@user.Id"
-                                                            class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
-                                                        <i data-lucide="trash2" class="w-4 h-4"></i>
-                                                    </a>
+                                                    <form method="post" asp-page="./Users/Delete" asp-route-id="@user.Id">
+                                                        <button data-slot="button"
+                                                                type="submit"
+                                                                class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
+                                                            <i data-lucide="trash2" class="w-4 h-4"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
@@ -288,17 +318,16 @@
             <div data-state="active" data-orientation="horizontal" role="tabpanel" aria-labelledby="radix-_r_6_-trigger-roles" id="radix-_r_6_-content-roles" tabindex="0" data-slot="tabs-content" class="flex-1 outline-none space-y-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold">Gestión de Roles</h3>
-                    <a data-slot="dialog-trigger"
-                       asp-page="./Roles/New"
-                            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                    <button data-slot="dialog-trigger"
+                            class="roles-crud-modal-open-btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
                             type="button"
                             aria-haspopup="dialog"
                             aria-expanded="false"
-                            aria-controls="radix-_r_61_"
+                            aria-controls="radix-_r_9_"
                             data-state="closed">
-                        <i data-lucide="plus" class="w-4 h-4"></i>              
+                        <i data-lucide="plus" class="w-4 h-4"></i>
                         Nuevo Rol
-                    </a>
+                    </button>
                 </div>
                 <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
                     <div data-slot="card-header" class="container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6">
@@ -318,6 +347,27 @@
                                     </tr>
                                 </thead>
                                 <tbody data-slot="table-body" class="[&amp;_tr:last-child]:border-0">
+                                    @if (Model.OrganizationAccessControlPageDto.Roles.Count() <= 0)
+                                    {
+                                        <tr>
+                                            <td colspan="7" class="p-8 text-center">
+                                                <div class="flex flex-col gap-3 items-center justify-center">
+                                                    <i data-lucide="shield" class="w-24 h-24"></i>
+                                                    <span class="text-muted-foreground">No se encontraron roles</span>
+                                                    <button data-slot="dialog-trigger"
+                                                            class="roles-crud-modal-open-btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                                                            type="button"
+                                                            aria-haspopup="dialog"
+                                                            aria-expanded="false"
+                                                            aria-controls="radix-_r_9_"
+                                                            data-state="closed">
+                                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                                        Nuevo Rol
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
                                     @foreach (var role in Model.OrganizationAccessControlPageDto.Roles)
                                     {
                                         <tr id="@role.Id" data-slot="table-row" class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
@@ -345,15 +395,17 @@
                                             <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]">
                                                 <div class="flex items-center gap-2">
                                                     <a data-slot="button"
-                                                       asp-page="./Roles/Edit" asp-route-id="@role.Id"
-                                                            class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
+                                                       asp-page="./Users/Edit" asp-route-id="@role.Id"
+                                                       class="hidden items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
                                                         <i data-lucide="square-pen" class="w-4 h-4"></i>
                                                     </a>
-                                                    <a data-slot="button"
-                                                       asp-page="./Roles/Delete" asp-route-id="@role.Id"
-                                                            class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
-                                                        <i data-lucide="trash2" class="w-4 h-4"></i>
-                                                    </a>
+                                                    <form method="post" asp-page="./Roles/Delete" asp-route-id="@role.Id">
+                                                        <button data-slot="button"
+                                                                type="submit"
+                                                                class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
+                                                            <i data-lucide="trash2" class="w-4 h-4"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
@@ -364,7 +416,243 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
+<div id="users-crud-modal" tabindex="-1" aria-hidden="true" class="modal hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow-sm">
+            <div class="flex items-center justify-between p-4 md:p-5 rounded-t">
+                <div data-slot="dialog-header" class="flex flex-col gap-2 text-left">
+                    <h2 data-slot="dialog-title" class="text-lg leading-none font-semibold">Nuevo Usuario</h2>
+                    <p data-slot="dialog-description" class="text-muted-foreground text-sm">Completa la información del nuevo usuario</p>
+                </div>
+                <button type="button" class="users-crud-modal-close-btn ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <form class="p-4 space-y-4" method="post" asp-page="./Users/New">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label name="NewUser.Username"
+                               data-slot="label"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="username">
+                            Nombre de Usuario
+                        </label>
+                        <input data-slot="input"
+                               name="NewUser.Username"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="username"
+                               placeholder="usuario123"
+                               required/>
+                    </div>
+                    <div>
+                        <label data-slot="label"
+                               name="NewUser.Email"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="email">
+                            Email
+                        </label>
+                        <input data-slot="input"
+                               name="NewUser.Email"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="email"
+                               placeholder="usuario@empresa.com"
+                               required
+                               type="email"/>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label data-slot="label"
+                               name="NewUser.Name"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="firstName">
+                            Nombre
+                        </label>
+                        <input data-slot="input"
+                               name="NewUser.Name"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="firstName"
+                               placeholder="Juan"
+                               required/>
+                    </div>
+                    <div>
+                        <label data-slot="label"
+                               name="NewUser.LastName"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="lastName">
+                            Apellido
+                        </label>
+                        <input data-slot="input"
+                               name="NewUser.LastName"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="lastName"
+                               placeholder="Pérez"
+                               required/>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label data-slot="label"
+                               name="NewUser.RoleId"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="role">
+                            Rol
+                        </label>
+                        <select name="NewUser.RoleId"
+                                required
+                                class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"                            <option value="inactive">Inactivo</option>
+                                <option value="" selected hidden>Seleccionar Rol</option>
+                            @foreach (var role in Model.OrganizationAccessControlPageDto.Roles)
+                            {
+                                <option value="@role.Id">@role.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label data-slot="label"
+                               name="NewUser.Status"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="status">
+                            Estado
+                        </label>
+                        <select name="NewUser.Status"
+                                required
+                                class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"                            <option value="inactive">Inactivo</option>
+                            <option value="" selected hidden>Seleccionar Estado</option>
+                            @foreach (var status in Model.Statuses)
+                            {
+                                <option value="@status.Code">@status.Description</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-4">
+                    <button data-slot="button"
+                            class="users-crud-modal-close-btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                            type="button">
+                        Cancelar
+                    </button>
+                    <button data-slot="button"
+                            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                            type="submit">
+                        Crear Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* <style>
+    input[type="checkbox"]:checked {
+        background-color: #10b981 !important; /* green-500 */
+        border-color: #059669 !important; /* green-600 */
+        color: white !important;
+    }
+</style> *@
+
+<div id="roles-crud-modal" tabindex="-1" aria-hidden="true" class="modal hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow-sm">
+            <div class="flex items-center justify-between p-4 md:p-5 rounded-t">
+                <div data-slot="dialog-header" class="flex flex-col gap-2 text-left">
+                    <h2 data-slot="dialog-title" class="text-lg leading-none font-semibold">Nuevo Rol</h2>
+                    <p data-slot="dialog-description" class="text-muted-foreground text-sm">Completa la información del nuevo rol</p>
+                </div>
+                <button type="button" class="roles-crud-modal-close-btn ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <form class="p-4 space-y-4" method="post" asp-page="./Roles/New">
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label name="NewRole.Name"
+                               data-slot="label"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="role">
+                            Nombre del Rol
+                        </label>
+                        <input data-slot="input"
+                               name="NewRole.Name"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="role"
+                               placeholder="Nombre descriptivo del rol"
+                               required />
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label data-slot="label"
+                               name="NewRole.Description"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="description">
+                            Descripción
+                        </label>
+                        <textarea data-slot="textarea"
+                                  name="NewRole.Description"
+                                  id="description"
+                                  class="border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                                  placeholder="Descripción detallada del rol y sus responsabilidades"
+                                  rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="hidden grid-cols-1 gap-4">
+                    <div class="flex items-center gap-1 mb-2">
+                        <input id="isAdmin"
+                               name="NewRole.IsAdminStr"
+                               type="checkbox"
+                               value="true"
+                               class="peer rounded-sm checked:bg-primary text-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-all outline-none focus:ring-0 focus:outline-none focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50">
+                        <label for="isAdmin"
+                               class="flex items-center gap-2 font-medium select-none text-sm">
+                            Es Administrador
+                        </label>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label data-slot="label"
+                               name="NewRole.PermissionIds"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="role">
+                            Permisos
+                        </label>
+                        <div class="mt-2 space-y-4 max-h-[50vh] overflow-y-auto border rounded-lg p-4">
+                            @foreach(var permissionDict in Model.SystemPermissions)
+                            {
+                                <div id="@permissionDict.Key" class="space-y-2">
+                                    <h4 class="font-medium text-sm text-primary">@permissionDict.Key</h4>
+                                    <div class="grid grid-cols-2 gap-2 ml-4">
+                                        @foreach (var permission in permissionDict.Value)
+                                        {
+                                            <div id="@permission.Id" class="flex items-center gap-1 mb-2">
+                                                <input id="@permission.Key" name="NewRole.SelectedPermissionIds" value="@permission.Id" type="checkbox" class="peer rounded-sm checked:bg-primary text-primary aria-invalid:ring-destructive /20 dark:aria-invalid:ring-destructive /40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-all outline-none focus:ring-0 focus:outline-none focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50">
+                                                <label for="@permission.Key" class="flex items-center gap-2 font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm">@permission.Name</label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-4">
+                    <button data-slot="button"
+                            class="roles-crud-modal-close-btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                            type="button">
+                        Cancelar
+                    </button>
+                    <button data-slot="button"
+                            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                            type="submit">
+                        Crear Rol
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -37,3 +37,62 @@ function toggleSidenavCollapsibleItem(number) {
         document.cookie = `${sidenavCollapsibleItemName}=true; path=/`;
     }
 }
+
+let modalTargetsEl = document.querySelectorAll('.modal');
+
+modalTargetsEl.forEach(mEl => {
+    const options = {
+        closable: true,
+        onHide: () => {
+            const form = mEl.querySelector('form');
+
+            if (form) {
+                Array.from(form.elements).forEach(el => {
+                    switch (el.type) {
+                        case 'text':
+                        case 'password':
+                        case 'email':
+                        case 'number':
+                        case 'url':
+                        case 'search':
+                        case 'tel':
+                        case 'textarea':
+                            el.value = '';
+                            break;
+
+                        case 'checkbox':
+                        case 'radio':
+                            el.checked = false;
+                            break;
+
+                        case 'select-one':
+                        case 'select-multiple':
+                            Array.from(el.options).forEach(option => option.selected = false);
+                            break;
+
+                        case 'file':
+                            el.value = null;
+                            break;
+
+                        default:
+                            el.value = '';
+                    }
+                });
+            }
+        },
+    };
+
+    const modal = new Modal(mEl, options);
+
+    document.querySelectorAll(`.${mEl.id}-open-btn`).forEach(btn => {
+        btn.addEventListener('click', () => {
+            modal.show()
+        })
+    })
+
+    document.querySelectorAll(`.${mEl.id}-close-btn`).forEach(btn => {
+        btn.addEventListener('click', () => {
+            modal.hide()
+        })
+    })
+});
