@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SistemaGestionInventario.Data;
 using SistemaGestionInventario.DTOs;
+using SistemaGestionInventario.Models;
 using SistemaGestionInventario.Pages.Shared.Types;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -19,7 +21,6 @@ namespace SistemaGestionInventario.Pages.Inventory
         {
             _context = context;
         }
-
         public List<SelectListItem> Categories { get; set; }
         public List<SelectListItem> States { get; set; }
         public int Total { get; set; }
@@ -85,6 +86,59 @@ namespace SistemaGestionInventario.Pages.Inventory
             await RefreshData();
 
             return new JsonResult(new { success = true });
+        }
+
+        public async Task<List<ArticleDto>> GetArticles(string searchCode, int category)
+        {
+            List<Category> categories = await _context.Categories.AsNoTracking().ToListAsync();
+            IQueryable<Article> articlesQuery = _context.Articles.AsNoTracking().Where(a => a.State).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchCode))
+            {
+                articlesQuery = articlesQuery.Where(a => a.Code.ToLower().Contains(searchCode.ToLower()));
+            }
+
+            if (category != 0)
+            {
+                articlesQuery = articlesQuery.Where(a => a.Category == category);
+            }
+
+            List<Article> articles = await articlesQuery.ToListAsync();
+            List<ArticleDto> articleDtos = new List<ArticleDto>();
+
+            articles.ForEach(a =>
+            {
+                articleDtos.Add(new ArticleDto
+                {
+                    Id = a.Id,
+                    Code = a.Code,
+                    Category = a.Category,
+                    CategoryName = categories.FirstOrDefault(c => c.Id == a.Category).Name,
+                    Name = a.Name,
+                    Description = a.Description,
+                    Price = a.Price,
+                    Stock = a.Stock,
+                    MinimumStock = a.MinimumStock,
+                    State = a.State ? "1" : "0"
+                });
+            });
+
+            return articleDtos;
+        }
+
+        public async Task<IActionResult> OnGetArticleTableAsync(string searchCode = "", int category = 0)
+        {
+            var articles = await GetArticles(searchCode, category); ;
+            return new JsonResult(articles);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OnPostArticleDelete(int id)
+        {
+            var article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == id);
+            article.State = false;
+            await _context.SaveChangesAsync();
+            return RedirectToPage();
         }
 
         public async Task RefreshData()

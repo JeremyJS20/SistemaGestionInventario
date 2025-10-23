@@ -11,6 +11,7 @@ namespace SistemaGestionInventario.DTOs
 
         [Required(ErrorMessage = "La categoria es requerida.")]
         public int Category { get; set; }
+        public string? CategoryName { get; set; }
 
         [Required(ErrorMessage = "El nombre es requerido.")]
         public string? Name { get; set; }
