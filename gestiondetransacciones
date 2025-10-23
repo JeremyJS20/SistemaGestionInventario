@@ -1,0 +1,219 @@
+// ===== SISTEMA DE GESTIÓN DE TRANSACCIONES =====
+
+// Estructura de datos para transacciones
+class Transaction {
+  constructor(type, productId, quantity, reason = '', userId = null) {
+    this.id = Date.now() + Math.random(); // ID único
+    this.type = type; // 'ENTRADA', 'SALIDA', 'AJUSTE'
+    this.productId = productId;
+    this.quantity = quantity;
+    this.reason = reason;
+    this.userId = userId;
+    this.timestamp = new Date().toISOString();
+  }
+}
+
+// Base de datos simulada (en producción usarías una BD real)
+let inventory = [
+  { id: 1, name: 'Laptop Dell', stock: 50, minStock: 10 },
+  { id: 2, name: 'Mouse Logitech', stock: 100, minStock: 20 },
+  { id: 3, name: 'Teclado Mecánico', stock: 30, minStock: 15 }
+];
+
+let transactionHistory = [];
+
+// ===== FUNCIONES PRINCIPALES =====
+
+/**
+ * Registrar ENTRADA de productos al inventario
+ */
+function registrarEntrada(productId, quantity, reason = 'Compra') {
+  if (quantity <= 0) {
+    return { success: false, message: 'La cantidad debe ser mayor a 0' };
+  }
+
+  const product = inventory.find(p => p.id === productId);
+  
+  if (!product) {
+    return { success: false, message: 'Producto no encontrado' };
+  }
+
+  // Actualizar stock
+  product.stock += quantity;
+
+  // Registrar transacción
+  const transaction = new Transaction('ENTRADA', productId, quantity, reason);
+  transactionHistory.push(transaction);
+
+  return {
+    success: true,
+    message: `Entrada registrada: +${quantity} unidades de ${product.name}`,
+    newStock: product.stock,
+    transaction
+  };
+}
+
+/**
+ * Registrar SALIDA de productos del inventario
+ */
+function registrarSalida(productId, quantity, reason = 'Venta') {
+  if (quantity <= 0) {
+    return { success: false, message: 'La cantidad debe ser mayor a 0' };
+  }
+
+  const product = inventory.find(p => p.id === productId);
+  
+  if (!product) {
+    return { success: false, message: 'Producto no encontrado' };
+  }
+
+  if (product.stock < quantity) {
+    return { 
+      success: false, 
+      message: `Stock insuficiente. Disponible: ${product.stock}, Solicitado: ${quantity}` 
+    };
+  }
+
+  // Actualizar stock
+  product.stock -= quantity;
+
+  // Registrar transacción
+  const transaction = new Transaction('SALIDA', productId, quantity, reason);
+  transactionHistory.push(transaction);
+
+  // Alerta si está bajo el mínimo
+  const alert = product.stock < product.minStock 
+    ? `⚠️ ALERTA: Stock bajo el mínimo (${product.minStock})` 
+    : '';
+
+  return {
+    success: true,
+    message: `Salida registrada: -${quantity} unidades de ${product.name}`,
+    newStock: product.stock,
+    transaction,
+    alert
+  };
+}
+
+/**
+ * Registrar AJUSTE de inventario (correcciones, pérdidas, daños)
+ */
+function registrarAjuste(productId, newQuantity, reason = 'Ajuste manual') {
+  if (newQuantity < 0) {
+    return { success: false, message: 'La cantidad no puede ser negativa' };
+  }
+
+  const product = inventory.find(p => p.id === productId);
+  
+  if (!product) {
+    return { success: false, message: 'Producto no encontrado' };
+  }
+
+  const difference = newQuantity - product.stock;
+  const oldStock = product.stock;
+
+  // Actualizar stock
+  product.stock = newQuantity;
+
+  // Registrar transacción
+  const transaction = new Transaction('AJUSTE', productId, difference, reason);
+  transactionHistory.push(transaction);
+
+  return {
+    success: true,
+    message: `Ajuste registrado: ${product.name} - Stock anterior: ${oldStock}, Nuevo stock: ${newQuantity}`,
+    difference: difference > 0 ? `+${difference}` : difference,
+    newStock: product.stock,
+    transaction
+  };
+}
+
+/**
+ * Obtener historial de transacciones (con filtros opcionales)
+ */
+function obtenerHistorial(filters = {}) {
+  let filtered = [...transactionHistory];
+
+  // Filtrar por tipo
+  if (filters.type) {
+    filtered = filtered.filter(t => t.type === filters.type);
+  }
+
+  // Filtrar por producto
+  if (filters.productId) {
+    filtered = filtered.filter(t => t.productId === filters.productId);
+  }
+
+  // Filtrar por fecha
+  if (filters.startDate) {
+    filtered = filtered.filter(t => new Date(t.timestamp) >= new Date(filters.startDate));
+  }
+
+  if (filters.endDate) {
+    filtered = filtered.filter(t => new Date(t.timestamp) <= new Date(filters.endDate));
+  }
+
+  return filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+}
+
+/**
+ * Obtener resumen de transacciones
+ */
+function obtenerResumen() {
+  const entradas = transactionHistory.filter(t => t.type === 'ENTRADA')
+    .reduce((sum, t) => sum + t.quantity, 0);
+  
+  const salidas = transactionHistory.filter(t => t.type === 'SALIDA')
+    .reduce((sum, t) => sum + t.quantity, 0);
+  
+  const ajustes = transactionHistory.filter(t => t.type === 'AJUSTE').length;
+
+  return {
+    totalEntradas: entradas,
+    totalSalidas: salidas,
+    totalAjustes: ajustes,
+    transaccionesTotales: transactionHistory.length
+  };
+}
+
+// ===== EJEMPLOS DE USO =====
+
+console.log('=== SISTEMA DE GESTIÓN DE TRANSACCIONES ===\n');
+
+// 1. ENTRADA de productos
+console.log('1. Registrando ENTRADA:');
+console.log(registrarEntrada(1, 25, 'Compra a proveedor'));
+console.log('');
+
+// 2. SALIDA de productos
+console.log('2. Registrando SALIDA:');
+console.log(registrarSalida(2, 30, 'Venta a cliente'));
+console.log('');
+
+// 3. AJUSTE de inventario
+console.log('3. Registrando AJUSTE:');
+console.log(registrarAjuste(3, 28, 'Ajuste por inventario físico'));
+console.log('');
+
+// 4. Ver historial
+console.log('4. Historial de transacciones:');
+console.log(obtenerHistorial());
+console.log('');
+
+// 5. Ver resumen
+console.log('5. Resumen de transacciones:');
+console.log(obtenerResumen());
+console.log('');
+
+// 6. Inventario actualizado
+console.log('6. Inventario actual:');
+console.log(inventory);
+
+// ===== EXPORTAR FUNCIONES (para usar en otros módulos) =====
+// module.exports = {
+//   registrarEntrada,
+//   registrarSalida,
+//   registrarAjuste,
+//   obtenerHistorial,
+//   obtenerResumen
+// };
