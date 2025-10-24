@@ -11,7 +11,7 @@
     </div>
 
     <div class="mt-3 md:mt-0">
-        <button data-modal-target="article-modal" data-modal-toggle="article-modal" type="button" class="bg-primary hover:bg-primary/90 cursor-pointer flex items-center space-x-2 text-primary-foreground px-4 py-2 rounded">
+        <button id="modal-btn" data-modal-target="article-modal" data-modal-toggle="article-modal" type="button" class="bg-primary hover:bg-primary/90 cursor-pointer flex items-center space-x-2 text-primary-foreground px-4 py-2 rounded">
             <svg xmlns="http://www.w3.org/2000/svg"
                  viewBox="0 0 24 24"
                  fill="none"
@@ -44,6 +44,7 @@
                     <div class="p-4 md:p-5 space-y-4">
                         <form id="articleForm" method="post">
                             <div class="mb-5 flex justify-between gap-2">
+                                <input asp-for="ArticleDto.Id" id="id" type="hidden" value="0" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" placeholder="LAP001" />
                                 <div class="flex-1">
                                     <label asp-for="ArticleDto.Code" class="block mb-2 text-sm font-medium text-gray-900">Código del Artículo</label>
                                     <input asp-for="ArticleDto.Code" id="code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" placeholder="LAP001" />
@@ -59,7 +60,7 @@
                             </div>
                             <div class="mb-5">
                                 <label asp-for="ArticleDto.Name" class="block mb-2 text-sm font-medium text-gray-900">Nombre del Artículo</label>
-                                <input asp-for="ArticleDto.Name" type="text" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" placeholder="Nombre descriptivo del artículo" />
+                                <input asp-for="ArticleDto.Name" type="text" id="nombre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] block w-full p-2.5" placeholder="Nombre descriptivo del artículo" />
                                 <span asp-validation-for="ArticleDto.Name" class="text-red-600"></span>
                             </div>
                             <div class="mb-5">
@@ -93,7 +94,7 @@
                     </div>
                     <div class="flex justify-end items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
                         <button id="close-btn"  data-modal-hide="article-modal" type="button" class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-sidebar-accent hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100">Cancelar</button>
-                        <button id="create-btn" type="button" class="ms-3 text-white bg-primary hover:bg-sidebar-accent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Crear Artículo</button>
+                        <button id="create-btn" type="button" class="ms-3 text-white bg-primary hover:bg-sidebar-accent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Guardar</button>
                     </div>
                 </div>
             </div>
@@ -167,12 +168,6 @@
     </div>
 </div>
 
-<form method="post" asp-page-handler="ArticleDelete" asp-route-id="1">
-    <button type="submit" data-slot="button" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6" /><path d="M14 11v6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>
-    </button>
-</form>
-
 <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
     <div data-slot="card-header" class="@@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6">
         <div data-slot="card-title" class="leading-none font-semibold">
@@ -211,6 +206,10 @@
                     </tr>
                 </thead>
                 <tbody data-slot="table-body" class="[&_tr:last-child]:border-0"></tbody>
+                <form id="deleteForm" method="post" asp-page-handler="ArticleDelete">
+                    <input type="hidden" name="id" id="deleteId" value="" />
+                    @Html.AntiForgeryToken()
+                </form>
             </table>
         </div>
     </div>
@@ -259,14 +258,12 @@
                             </td>
                             <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
                                 <div class="flex items-center gap-2">
-                                    <button data-slot="button" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5">
+                                    <button data-slot="button" data-id="${article.id}" class="btn-edit inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen-icon lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" /></svg>
                                     </button>
-                                    <form method="post" action="/Inventory/Articles?id=1&handler=ArticleDelete">
-                                        <button type="submit" data-slot="button" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6" /><path d="M14 11v6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>
-                                        </button>
-                                    </form>
+                                    <button data-slot="button" data-id="${article.id}" class="btn-delete inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6" /><path d="M14 11v6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -274,14 +271,47 @@
                     })
                     tableBody.innerHTML = innerHtml;
                     articleCount.innerHTML = data.length
+
+                    document.querySelectorAll('.btn-edit').forEach(btn => {
+                        btn.addEventListener('click', e => {
+                            const id = btn.getAttribute('data-id');
+
+                            fetch(`@Url.Page("", "Article")&id=${id}`, {
+                              method: 'GET',
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+
+                                document.querySelector("#id").value = data.id;
+                                document.querySelector("#code").value = data.code;
+                                document.querySelector("#categoria").value = data.category;
+                                document.querySelector("#nombre").value = data.name;
+                                document.querySelector("#descripcion").value = data.description;
+                                document.querySelector("#precio").value = data.price;
+                                document.querySelector("#stock").value = data.stock;
+                                document.querySelector("#stockMin").value = data.minimumStock;
+                                document.querySelector("#estado").value = data.state ? "1" : "0";
+
+                                document.querySelector("#modal-btn").click();
+                            })
+                        })
+                    });
+
+                    document.querySelectorAll('.btn-delete').forEach(btn => {
+                        btn.addEventListener('click', e => {
+                            const id = btn.getAttribute('data-id');
+
+                            document.querySelector('#deleteId').value = id;
+                            document.querySelector('#deleteForm').submit();
+                        })
+                    });
                 })
             }
 
-            fillTable("");
+            fillTable("", 0);
 
             const createBtn = document.querySelector('#create-btn');
             let form = document.querySelector('#articleForm');
-            let modal = document.querySelector('#article-modal');
             let closeBtn = document.querySelector('#close-btn');
             let cancelBtn = document.querySelector('#cancel-btn');
             let searchByCodeInput = document.querySelector("#searchByCode");
@@ -292,7 +322,6 @@
             })
 
             closeBtn.addEventListener('click', () => {
-                console.log(form.reset)
                 form.reset();
 
                 const validationMessages = form.querySelectorAll(".text-red-600");
@@ -300,7 +329,6 @@
             })
 
             cancelBtn.addEventListener('click', () => {
-                console.log(form.reset)
                 form.reset();
 
                 const validationMessages = form.querySelectorAll(".text-red-600");
@@ -327,7 +355,6 @@
                     });
 
                     if (result.success) {
-                        closeBtn.click();
                         window.location.reload();
                     } else {
                         for (let field in result.errors) {

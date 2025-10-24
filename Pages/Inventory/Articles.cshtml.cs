@@ -62,24 +62,38 @@ namespace SistemaGestionInventario.Pages.Inventory
                     );
             }
 
-            bool existsCode = await _context.Articles.Where(a => a.Code.ToUpper() == (ArticleDto.Code ?? "").ToUpper()).AnyAsync();
+            bool existsCode = await _context.Articles.Where(a => a.Code.ToUpper() == (ArticleDto.Code ?? "").ToUpper() && a.Id != ArticleDto.Id && a.State).AnyAsync();
 
             if (existsCode) errors.Add("ArticleDto.Code", "Este codigo ya existe");
             if (ArticleDto.Category == 0) errors.Add("ArticleDto.Category", "Esta categoria no es valida");
 
             if (errors.Any()) return new JsonResult(new { success = false, errors });
 
-            await _context.Articles.AddAsync(new Models.Article
+            if (ArticleDto.Id == 0)
             {
-                Code = ArticleDto.Code.ToUpper(),
-                Category = ArticleDto.Category,
-                Name = ArticleDto.Name,
-                Description = ArticleDto.Description,
-                Price = ArticleDto.Price,
-                Stock = ArticleDto.Stock,
-                MinimumStock = ArticleDto.MinimumStock,
-                State = ArticleDto.State == "1",
-            });
+                await _context.Articles.AddAsync(new Models.Article
+                {
+                    Code = ArticleDto.Code.ToUpper(),
+                    Category = ArticleDto.Category,
+                    Name = ArticleDto.Name,
+                    Description = ArticleDto.Description,
+                    Price = ArticleDto.Price,
+                    Stock = ArticleDto.Stock,
+                    MinimumStock = ArticleDto.MinimumStock,
+                    State = ArticleDto.State == "1",
+                });
+            } else
+            {
+                Article article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == ArticleDto.Id);
+                article.Code = ArticleDto.Code;
+                article.Category = ArticleDto.Category;
+                article.Name = ArticleDto.Name;
+                article.Description = ArticleDto.Description;
+                article.Price = ArticleDto.Price;
+                article.Stock = ArticleDto.Stock;
+                article.MinimumStock = ArticleDto.MinimumStock;
+                article.State = ArticleDto.State == "1";
+            }
 
             await _context.SaveChangesAsync();
 
@@ -132,7 +146,12 @@ namespace SistemaGestionInventario.Pages.Inventory
             return new JsonResult(articles);
         }
 
-        [HttpPost]
+        public async Task<IActionResult> OnGetArticleAsync(int id)
+        {
+            var article = await  _context.Articles.FirstOrDefaultAsync(a => a.Id == id);
+            return new JsonResult(article);
+        }
+
         public async Task<IActionResult> OnPostArticleDelete(int id)
         {
             var article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == id);
