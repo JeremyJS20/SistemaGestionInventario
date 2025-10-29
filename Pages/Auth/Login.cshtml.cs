@@ -28,6 +28,7 @@ namespace SistemaGestionInventario.Pages.Auth
 
         [BindProperty]
         public UserLogin user { get; set; } = default!;
+        public bool ShowError { get; set; } = false;
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -39,6 +40,7 @@ namespace SistemaGestionInventario.Pages.Auth
 
             if (userDb is null)
             {
+                ShowError = true;
                 return Page();
             }
 
@@ -46,6 +48,7 @@ namespace SistemaGestionInventario.Pages.Auth
 
             if (!isValidPassword)
             {
+                ShowError = true;
                 return Page();
             }
 
