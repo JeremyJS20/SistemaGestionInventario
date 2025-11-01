@@ -1,10 +1,483 @@
 ﻿@page
-@model SistemaGestionInventario.Pages.Warehouse.IndexModel
+@model SistemaGestionInventario.Pages.Warehouses.IndexModel
 @{
-    ViewData["Title"] = "Index Warehouses page";
+    ViewData["Title"] = "Almacenes";
+
 }
 
-<div class="">
-    <h1 class="text-red-500">Index Warehouses Page</h1>
+<div class="flex items-center justify-between">
+    <div>
+        <h2 class="text-2xl font-bold text-foreground">Gestión de Almacenes</h2>
+        <p class="text-muted-foreground">Administrar ubicaciones, capacidades y operaciones</p>
+    </div>
+</div>
+<div class="w-full text-right">
+    <button data-slot="dialog-trigger"
+            class="warehouses-crud-modal-open-btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="radix-_r_9_"
+            data-state="closed">
+        <i data-lucide="plus" class="w-4 h-4"></i>
+        Nuevo Almacen
+    </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+        <div data-slot="card-content" class="p-4">
+            <div class="flex items-center gap-2">
+                <i data-lucide="building2" class="w-5 h-5 text-blue-500"></i>
+                <div>
+                    <p class="text-sm text-muted-foreground">Total Almacenes</p>
+                    <p class="text-xl font-bold">@Model.OrganizationAccessControlPageDto.Resume.TotalUsers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+        <div data-slot="card-content" class="p-4">
+            <div class="flex items-center gap-2">
+                <i data-lucide="circle-check" class="w-5 h-5 text-green-500"></i>
+                <div>
+                    <p class="text-sm text-muted-foreground">Activos</p>
+                    <p class="text-xl font-bold">@Model.OrganizationAccessControlPageDto.Resume.TotalActiveUsers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+        <div data-slot="card-content" class="p-4">
+            <div class="flex items-center gap-2">
+                <i data-lucide="package" class="w-5 h-5 text-orange-500"></i>
+                <div>
+                    <p class="text-sm text-muted-foreground">Capacidad Total</p>
+                    <p class="text-xl font-bold">@Model.OrganizationAccessControlPageDto.Resume.TotalDefinedRoles</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+        <div data-slot="card-content" class="p-4">
+            <div class="flex items-center gap-2">
+                <i data-lucide="package" class="w-5 h-5 text-purple-500"></i>
+                <div>
+                    <p class="text-sm text-muted-foreground">Stock Total</p>
+                    <p class="text-xl font-bold">@Model.OrganizationAccessControlPageDto.Resume.TotalPermissions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div dir="ltr" data-orientation="horizontal" data-slot="tabs" class="flex flex-col gap-2 space-y-4">
+    <div class="" id="users" role="tabpanel" aria-labelledby="users-tab">
+        <div data-state="active"
+             data-orientation="horizontal"
+             role="tabpanel"
+             aria-labelledby="radix-_r_6_-trigger-users"
+             id="radix-_r_6_-content-users"
+             tabindex="0"
+             data-slot="tabs-content"
+             class="flex-1 outline-none space-y-4"
+             style="animation-duration: 0s;">
+            <div data-slot="card" class="bg-card hidden text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+                <div data-slot="card-content" class="p-4">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1">
+                            <div class="relative">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="24"
+                                     height="24"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     class="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.3-4.3"></path>
+                                </svg>
+                                <input data-slot="input"
+                                       class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive pl-10"
+                                       placeholder="Buscar por nombre, usuario o email..."
+                                       value="" />
+                            </div>
+                        </div>
+                        <button type="button"
+                                role="combobox"
+                                aria-controls="radix-_r_c_"
+                                aria-expanded="false"
+                                aria-autocomplete="none"
+                                dir="ltr"
+                                data-state="closed"
+                                data-slot="select-trigger"
+                                data-size="default"
+                                class="border-input data-[placeholder]:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-full sm:w-48">
+                            <span data-slot="select-value" style="pointer-events: none;">Todos los roles</span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="24"
+                                 height="24"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="lucide lucide-chevron-down size-4 opacity-50"
+                                 aria-hidden="true">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </button>
+                        <button type="button"
+                                role="combobox"
+                                aria-controls="radix-_r_d_"
+                                aria-expanded="false"
+                                aria-autocomplete="none"
+                                dir="ltr"
+                                data-state="closed"
+                                data-slot="select-trigger"
+                                data-size="default"
+                                class="border-input data-[placeholder]:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-full sm:w-48">
+                            <span data-slot="select-value" style="pointer-events: none;">Todos los estados</span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="24"
+                                 height="24"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 class="lucide lucide-chevron-down size-4 opacity-50"
+                                 aria-hidden="true">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+                <div data-slot="card-header" class="container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6">
+                    <div data-slot="card-title" class="leading-none font-semibold">Lista de Almacenes</div>
+                    <div data-slot="card-description" class="text-muted-foreground text-sm">@Model.OrganizationAccessControlPageDto.Users.Count() almacen(es) encontrado(s)</div>
+                </div>
+                <div data-slot="card-content" class="px-6">
+                    <div data-slot="table-container" class="relative w-full overflow-x-auto">
+                        <table data-slot="table" class="w-full caption-bottom text-sm">
+                            <thead data-slot="table-header" class="[&amp;_tr]:border-b">
+                                <tr data-slot="table-row" class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
+                                    <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]">
+                                        Usuario
+                                    </th>
+                                    <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]">
+                                        Nombre Completo
+                                    </th>
+                                    <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]">
+                                        Email
+                                    </th>
+                                    <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]">
+                                        Rol
+                                    </th>
+                                    <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]">
+                                        Estado
+                                    </th>
+                                    <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]">
+                                        Último Acceso
+                                    </th>
+                                    <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]">
+                                        Acciones
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody data-slot="table-body" class="[&amp;_tr:last-child]:border-0">
+                                @if (Model.OrganizationAccessControlPageDto.Users.Count() <= 0)
+                                {
+                                    <tr>
+                                        <td colspan="7" class="p-8 text-center">
+                                            <div class="flex flex-col gap-3 items-center justify-center">
+                                                <i data-lucide="user-round-x" class="w-24 h-24"></i>
+                                                <span class="text-muted-foreground">No se encontraron usuarios</span>
+                                                <button data-slot="dialog-trigger"
+                                                        class="warehouses-crud-modal-open-btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                                                        type="button"
+                                                        aria-haspopup="dialog"
+                                                        aria-expanded="false"
+                                                        aria-controls="radix-_r_9_"
+                                                        data-state="closed">
+                                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                                    Nuevo Usuario
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+
+                                @foreach (var user in Model.OrganizationAccessControlPageDto.Users)
+                                {
+                                    <tr id="@user.Id" data-slot="table-row" class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
+                                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap font-mono">
+                                            @user.Username
+                                        </td>
+                                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap">
+                                            <div>
+                                                <p class="font-medium">
+                                                    @user.FullName
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap">
+                                            @user.Email
+                                        </td>
+                                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap">
+                                            @if (user.Roles.Count() <= 0)
+                                            {
+                                                <span data-slot="badge"
+                                                      class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-foreground [a&amp;]:hover:bg-accent [a&amp;]:hover:text-accent-foreground">
+                                                    Ninguno
+                                                </span>
+                                            }
+                                            @foreach (var role in user.Roles)
+                                            {
+                                                <span data-slot="badge"
+                                                      class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-foreground [a&amp;]:hover:bg-accent [a&amp;]:hover:text-accent-foreground">
+                                                    @role.Name
+                                                </span>
+                                            }
+                                        </td>
+                                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 [&amp;&gt;[role=checkbox]]:translate-y-[2px]">
+                                            <span data-slot="badge"
+                                                  class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-primary text-primary-foreground [a&amp;]:hover:bg-primary/90">
+                                                @user.Status
+                                            </span>
+                                        </td>
+                                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap">
+                                            <p class="text-sm">
+                                                @user.LastAccess
+                                            </p>
+                                        </td>
+                                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap">
+                                            <div class="flex items-center gap-2">
+                                                <a data-slot="button"
+                                                   asp-page="./Users/Edit" asp-route-id="@user.Id"
+                                                   class="hidden items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
+                                                    <i data-lucide="square-pen" class="w-4 h-4"></i>
+                                                </a>
+                                                <form method="post" asp-page="./Users/Delete" asp-route-id="@user.Id">
+                                                    <button data-slot="button"
+                                                            type="submit"
+                                                            class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[&gt;svg]:px-2.5">
+                                                        <i data-lucide="trash2" class="w-4 h-4"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<div id="warehouses-crud-modal" tabindex="-1" aria-hidden="true" class="modal hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow-sm">
+            <div class="flex items-center justify-between p-4 md:p-5 rounded-t">
+                <div data-slot="dialog-header" class="flex flex-col gap-2 text-left">
+                    <h2 data-slot="dialog-title" class="text-lg leading-none font-semibold">Nuevo Almacén</h2>
+                    <p data-slot="dialog-description" class="text-muted-foreground text-sm">Completa la información del nuevo almacén</p>
+                </div>
+                <button type="button" class="warehouses-crud-modal-close-btn ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <form class="p-4 space-y-4" method="post" asp-page="./Warehouses/New">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label name="NewWarehouse.Code"
+                               data-slot="label"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="username">
+                            Código del Almacén
+                        </label>
+                        <input data-slot="input"
+                               name="NewWarehouse.Code"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="code"
+                               placeholder="Ej: ALM-001"
+                               required />
+                    </div>
+                    <div>
+                        <label data-slot="label"
+                               name="NewWarehouse.Status"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="status">
+                            Estado
+                        </label>
+                        <select name="NewWarehouse.Status"
+                                required
+                                class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"                            <option value="inactive">Inactivo</option>
+                            <option value="" selected hidden>Seleccionar Estado</option>
+                            @foreach (var status in Model.Statuses)
+                            {
+                                        <option value="@status.Code">@status.Description</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="">
+                    <div>
+                        <label data-slot="label"
+                               name="NewWarehouse.Name"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="name">
+                            Nombre
+                        </label>
+                        <input data-slot="input"
+                               name="NewWarehouse.Name"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="name"
+                               placeholder="Nombre descriptivo del almacen"
+                               required />
+                    </div>
+                </div>
+                <div class="">
+                    <div>
+                        <label data-slot="label"
+                               name="NewWarehouse.Description"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="description">
+                            Descripcion
+                        </label>
+                        <textarea data-slot="input"
+                               rows="4"
+                               name="NewWarehouse.Description"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="description"
+                               placeholder="Descripcion detallada del almacen"
+                               required ></textarea>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label data-slot="label"
+                               name="NewWarehouse.Address"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="address">
+                            Direccion
+                        </label>
+                        <input data-slot="input"
+                               name="NewWarehouse.Address"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="address"
+                               placeholder="Direccion completa"
+                               required />
+                    </div>
+                    <div>
+                        <label data-slot="label"
+                               name="NewWarehouse.City"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="city">
+                            Ciudad
+                        </label>
+                        <input data-slot="input"
+                               name="NewWarehouse.City"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="flex"
+                               placeholder="Direccion completa"
+                               required />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label data-slot="label"
+                               name="NewWarehouse.Capacity"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="capacity">
+                            Capacidad total
+                        </label>
+                        <input data-slot="input"
+                               name="NewWarehouse.Capacity"
+                               type="number"
+                               value="0"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="capacity"
+                               required />
+                    </div>
+                    <div>
+                        <label data-slot="label"
+                               name="NewWarehouse.Landlord"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="landlord">
+                            Responsable
+                        </label>
+                        <select name="NewWarehouse.Landlord"
+                                required
+                                class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"                            <option value="inactive">Inactivo</option>
+                            <option value="" selected hidden>Seleccione Responsable</option>
+                            @foreach (var status in Model.Statuses)
+                            {
+                                            <option value="@status.Code">@status.Description</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label data-slot="label"
+                               name="NewWarehouse.Phone"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="phone">
+                            Telefono
+                        </label>
+                        <input data-slot="input"
+                               placeholder="0000000000"
+                               name="NewWarehouse.Phone"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="phone"
+                               required />
+                    </div>
+                    <div>
+                        <label data-slot="label"
+                               name="NewWarehouse.Email"
+                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                               for="email">
+                            Correo
+                        </label>
+                        <input data-slot="input"
+                               name="NewWarehouse.Email"
+                               type="email"
+                               placeholder="example@example.com"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                               id="email"
+                               required />
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-4">
+                    <button data-slot="button"
+                            class="warehouses-crud-modal-close-btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                            type="button">
+                        Cancelar
+                    </button>
+                    <button data-slot="button"
+                            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3"
+                            type="submit">
+                        Crear Almacen
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* <style>
+    input[type="checkbox"]:checked {
+        background-color: #10b981 !important; /* green-500 */
+        border-color: #059669 !important; /* green-600 */
+        color: white !important;
+    }
+</style> *@
