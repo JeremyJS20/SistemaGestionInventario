@@ -22,4 +22,6 @@ public partial class Article
     public int MinimumStock { get; set; }
 
     public bool State { get; set; }
+
+    public Category CategoryClass { get; set; }
 }

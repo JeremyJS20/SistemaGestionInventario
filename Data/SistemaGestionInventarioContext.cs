@@ -183,6 +183,10 @@ namespace SistemaGestionInventario.Data
                 entity.Property(e => e.Code).IsUnicode(false);
                 entity.Property(e => e.Description).IsUnicode(false);
                 entity.Property(e => e.Name).IsUnicode(false);
+
+                entity.HasOne(a => a.CategoryClass)
+                .WithOne(c => c.Article)
+                .HasForeignKey<Article>(a => a.Category);
             });
 
             modelBuilder.Entity<Category>(entity =>

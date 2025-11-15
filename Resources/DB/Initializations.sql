@@ -184,3 +184,9 @@ update Users set Username = 'jsolano2' where Id = 2;
 
 alter table Users ADD CONSTRAINT unq_user_username UNIQUE (Username);
 alter table Users ADD CONSTRAINT unq_user_email UNIQUE (Email);
+
+
+select * from Articles;
+select * from Category;
+
+update Articles set Stock = 4 where Code = 'LA006';
