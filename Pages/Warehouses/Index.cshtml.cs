@@ -18,65 +18,41 @@ namespace SistemaGestionInventario.Pages.Warehouses
             _context = context;
         }
 
-        public OrganizationAccessControlPageDto OrganizationAccessControlPageDto { get; set; } = default!;
+        public OrganizationWarehousesPageDto OrganizationWarehousesPageDto { get; set; } = default!;
 
-        public IList<UserStatusEnum> Statuses { get; set; } = UserStatusEnum.GetAll();
-
-        public Dictionary<string, List<Permission>> SystemPermissions { get; set; } = default!;
+        public IList<WarehouseStatusEnum> Statuses { get; set; } = WarehouseStatusEnum.GetAll();
 
         public async Task OnGetAsync()
         {
-            this.OrganizationAccessControlPageDto = await _context.Organizations
+            this.OrganizationWarehousesPageDto = await _context.Organizations
                 .Where(or => or.Id == int.Parse(User.FindFirstValue("SelectedOrganizationId")!))
-                .Select(or => new OrganizationAccessControlPageDto
+                .Select(or => new OrganizationWarehousesPageDto
                 {
-                    Users = or.OrganizationUsers
-                        .Where(or => or.User.Id != int.Parse(User.FindFirstValue("UserId")!))
-                        .Select(orgUser => new UserDto
+                    Warehouses = or.OrganizationWarehouses
+                        .Select(orgWh => new WarehouseDto
                         {
-                            Id = orgUser.User.Id,
-                            Username = orgUser.User.Username,
-                            FullName = $"{orgUser.User.Name} {orgUser.User.LastName}",
-                            Email = orgUser.User.Email,
-                            Status = UserStatusEnum.FromCode(orgUser.User.Status).Description,
-                            LastAccess = DateTime.Now.ToString("d/M/yyyy"),
-                            Roles = orgUser.OrganizationUserRole
-                                .Select(our => new RoleDto
-                                {
-                                    Id = our.Role.Id,
-                                    Name = our.Role.Name,
-                                    Description = our.Role.Description,
-                                }).ToList()
-                        }).ToList(),
+                            Id = orgWh.Warehouse.Id,
+                            Code = orgWh.Warehouse.Code,
+                            Name = orgWh.Warehouse.Name,
+                            Description = orgWh.Warehouse.Description,
+                            Address = orgWh.Warehouse.Address,
+                            City = orgWh.Warehouse.City,
+                            Capacity = orgWh.Warehouse.Capacity,
+                            Stock = orgWh.Warehouse.Stock,
+                            ResponsibleName = orgWh.Warehouse.ResponsibleName,
+                            Status = orgWh.Warehouse.Status,
+                            StatusText = WarehouseStatusEnum.FromCode(orgWh.Warehouse.Status).Description
 
-                    Roles = or.Roles
-                        .Select(r => new RoleDto
-                        {
-                            Id = r.Id,
-                            Name = r.Name,
-                            TotalUsers = r.OrganizationUserRole.Select(our => our.User).Count(),
-                            Description = r.Description,
-                            Permissions = r.RolePermissions
-                                .Select(p => new PermissionDto
-                                {
-                                    Id = p.Permission.Id,
-                                    Name = p.Permission.Name
-                                }).ToList()
                         }).ToList(),
-                    Resume = new ResumeDto
+                    Resume = new OrganizationWarehousesPageResumeDto
                     {
-                        TotalUsers = or.OrganizationUsers.Where(u => u.User.Id != int.Parse(User.FindFirstValue("UserId")!)).Count(),
-                        TotalActiveUsers = or.OrganizationUsers.Where(u => u.User.Status == UserStatusEnum.AC.Code && u.User.Id != int.Parse(User.FindFirstValue("UserId")!)).Count(),
-                        TotalDefinedRoles = or.Roles.Count(),
-                        TotalPermissions = _context.Permissions.Count()
+                        TotalWarehouses = or.OrganizationWarehouses.Count(),
+                        TotalActiveWarehouses = or.OrganizationWarehouses.Where(orgWh => orgWh.Warehouse.Status == WarehouseStatusEnum.AC.Code).Count(),
+                        TotalWarehousesCapacity = or.OrganizationWarehouses.Sum(orgWh => orgWh.Warehouse.Capacity),
+                        TotalWarehousesStock = or.OrganizationWarehouses.Sum(orgWh => orgWh.Warehouse.Stock)
                     }
                 })
                 .FirstOrDefaultAsync();
-
-            this.SystemPermissions = await _context.Permissions
-                .Select(p => p)
-                .GroupBy(p => p.Category)
-                .ToDictionaryAsync(g => g.Key, g => g.ToList());
 
             ViewData["ActivePage"] = "Warehouses";
             ViewData["PageRoutes"] = new List<RouteItem> {

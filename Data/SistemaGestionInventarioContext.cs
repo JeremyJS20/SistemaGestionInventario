@@ -34,6 +34,10 @@ namespace SistemaGestionInventario.Data
 
         public virtual DbSet<Category> Categories { get; set; }
 
+        public virtual DbSet<OrganizationWarehouse> OrganizationWarehouses { get; set; }
+
+        public virtual DbSet<Warehouse> Warehouses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Organization>(entity =>
@@ -196,6 +200,52 @@ namespace SistemaGestionInventario.Data
                 entity.ToTable("Category");
 
                 entity.Property(e => e.Name).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<OrganizationWarehouse>(entity =>
+            {
+                entity.HasKey(e => new { e.IdOrganization, e.IdWarehouse });
+
+                entity.HasOne(e => e.Organization)
+                    .WithMany(o => o.OrganizationWarehouses)
+                    .HasForeignKey(e => e.IdOrganization)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_organization_warehouse");
+
+                entity.HasOne(e => e.Warehouse)
+                    .WithMany()
+                    .HasForeignKey(e => e.IdWarehouse)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk2_organization_warehouse");
+            });
+
+
+            modelBuilder.Entity<Warehouse>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("pk_warehouses");
+
+                entity.Property(e => e.Address)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+                entity.Property(e => e.City)
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+                entity.Property(e => e.Description)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+                entity.Property(e => e.ResponsibleName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+                entity.Property(e => e.Status)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .HasDefaultValue("AC");
             });
 
             OnModelCreatingPartial(modelBuilder);
