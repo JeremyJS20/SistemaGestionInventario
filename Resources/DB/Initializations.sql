@@ -184,3 +184,35 @@ update Users set Username = 'jsolano2' where Id = 2;
 
 alter table Users ADD CONSTRAINT unq_user_username UNIQUE (Username);
 alter table Users ADD CONSTRAINT unq_user_email UNIQUE (Email);
+
+
+select * from Articles;
+select * from Category;
+
+update Articles set Stock = 4 where Code = 'LA006';
+
+
+CREATE TABLE Warehouses (
+    Id INT IDENTITY(1,1) CONSTRAINT pk_warehouses PRIMARY KEY,
+    Code VARCHAR(50) NOT NULL UNIQUE,
+    [Name] VARCHAR(50) NOT NULL,
+	[Description] VARCHAR(100) NOT NULL,
+	[Address] VARCHAR(100) NOT NULL,
+	City VARCHAR(25) NOT NULL,
+	Capacity INT NOT NULL,
+	Stock INT NOT NULL,
+	ResponsibleName VARCHAR(100) NOT NULL,
+	[Status] VARCHAR(3) NOT NULL DEFAULT 'AC' CONSTRAINT ck_status_warehouses CHECK ([Status] IN ('AC', 'IN', 'MTN')),
+);
+
+create table OrganizationWarehouses(
+	IdOrganization int not null constraint fk_organization_warehouse foreign key references Organizations(id),
+	IdWarehouse int not null constraint fk2_organization_warehouse foreign key references Warehouses(Id)
+);
+
+drop table Warehouses;
+drop table OrganizationWarehouses;
+
+select * from Warehouses;
+
+delete from Warehouses;

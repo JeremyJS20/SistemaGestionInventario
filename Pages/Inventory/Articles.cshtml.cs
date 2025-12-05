@@ -27,11 +27,14 @@ namespace SistemaGestionInventario.Pages.Inventory
         public int Activos { get; set; }
         public int StockBajo { get; set; }
 
+        public IList<ArticleDto> BelowReorderPointArticlesDto { get; set; }
+
+
         public async Task OnGetAsync()
         {
             ViewData["ActivePage"] = "Articles";
             ViewData["PageRoutes"] = new List<RouteItem> {
-                new RouteItem { Label = "Inventario > <strong>Getión de Artículos</strong>" }
+                new RouteItem { Label = "Inventario > <strong>Gestión de Artículos</strong>" }
             };
 
             Categories = await _context.Categories.Select(c => new SelectListItem
@@ -45,6 +48,19 @@ namespace SistemaGestionInventario.Pages.Inventory
                 new SelectListItem{ Value = "1", Text = "Activo" },
                 new SelectListItem{ Value = "0", Text = "Inactivo" }
             };
+
+            this.BelowReorderPointArticlesDto = await _context.Articles
+                .Where(a => a.Stock < a.MinimumStock)
+                .Select(a => new ArticleDto
+                {
+                    Code = a.Code,
+                    Name = a.Name,
+                    Category = a.Category,
+                    CategoryName = a.CategoryClass.Name,
+                    Price = a.Price,
+                    Stock = a.Stock,
+                    MinimumStock = a.MinimumStock
+                }).ToListAsync();
 
             await RefreshData();
         }
