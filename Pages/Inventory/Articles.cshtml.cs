@@ -31,7 +31,7 @@ namespace SistemaGestionInventario.Pages.Inventory
         {
             ViewData["ActivePage"] = "Articles";
             ViewData["PageRoutes"] = new List<RouteItem> {
-                new RouteItem { Label = "Inventario > <strong>Getión de Artículos</strong>" }
+                new RouteItem { Label = "Inventario > <strong>Gestión de Artículos</strong>" }
             };
 
             Categories = await _context.Categories.Select(c => new SelectListItem

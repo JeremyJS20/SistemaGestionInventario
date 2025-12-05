@@ -4,7 +4,414 @@
     ViewData["Title"] = "Index Transactions page";
 }
 
-<div class="">
-    <h1 class="text-red-500">Index Transactions Page</h1>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+    <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+        <div data-slot="card-content" class="p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-muted-foreground">Total Transacciones</p>
+                    <p class="text-2xl font-bold text-foreground">4</p>
+                </div>
+                <i data-lucide="package" class="w-8 h-8 text-blue-500"></i>
+            </div>
+        </div>
+    </div>
+    <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+        <div data-slot="card-content" class="p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-muted-foreground">Entradas</p>
+                    <p class="text-2xl font-bold text-green-600">2</p>
+                </div>
+                <i data-lucide="circle-arrow-down" class="w-8 h-8 text-green-600"></i>
+            </div>
+        </div>
+    </div>
+    <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+        <div data-slot="card-content" class="p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-muted-foreground">Salidas</p>
+                    <p class="text-2xl font-bold text-red-600">1</p>
+                </div>
+                <i data-lucide="circle-arrow-up" class="w-8 h-8 text-red-600"></i>
+            </div>
+        </div>
+    </div>
+    <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+        <div data-slot="card-content" class="p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-muted-foreground">Ajustes</p>
+                    <p class="text-2xl font-bold text-yellow-500">1</p>
+                </div>
+                <i data-lucide="settings" class="w-8 h-8 text-yellow-500"></i>
+            </div>
+        </div>
+    </div>
+    <div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+        <div data-slot="card-content" class="p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-muted-foreground">Pendientes</p>
+                    <p class="text-2xl font-bold text-orange-600">1</p>
+                </div>
+                <i data-lucide="calendar" class="w-8 h-8 text-orange-600"></i>
+            </div>
+        </div>
+    </div>
 </div>
 
+<div data-slot="card" class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm">
+    <div data-slot="card-header" class="@@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <div data-slot="card-title" class="leading-none font-semibold">
+                    Gestión de Transacciones
+                </div>
+                <div data-slot="card-description" class="text-muted-foreground text-sm">
+                    Administrar entradas, salidas y ajustes de inventario
+                </div>
+            </div>
+            <button id="modal-btn" data-modal-target="transaction-modal" data-modal-toggle="transaction-modal" type="button" class="bg-primary hover:bg-primary/90 cursor-pointer flex items-center space-x-2 text-primary-foreground px-4 py-2 rounded">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     class="h-5 w-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Nueva Transacción</span>
+            </button>
+            <div id="transaction-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative p-4">
+                    <div class="relative bg-white rounded-lg shadow-sm">
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+                            <div data-slot="dialog-header" class="flex flex-col gap-2 sm:text-left">
+                                <h2 data-slot="dialog-title" class="text-lg leading-none font-semibold">
+                                    Nueva Transacción
+                                </h2>
+                                <p data-slot="dialog-description" class="text-muted-foreground text-sm">
+                                    Registra una nueva transacción de inventario
+                                </p>
+                            </div>
+                            <button id="cancel-btn" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="transaction-modal">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                        </div>
+                        <div class="p-4 md:p-5 space-y-4">
+                            <div class="inline-flex rounded-base shadow-xs -space-x-px w-full text-center" role="group">
+                                <button id="entradaTab" type="button" class="inline-flex flex-1 items-center text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-s-base text-sm px-3 py-2 focus:outline-none">
+                                    <i data-lucide="circle-arrow-down" class="w-4 h-4 me-1"></i>
+                                    Entrada
+                                </button>
+                                <button id="salidaTab" type="button" class="inline-flex flex-1 items-center text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 text-sm px-3 py-2 focus:outline-none">
+                                    <i data-lucide="circle-arrow-up" class="w-4 h-4 me-1"></i>
+                                    Salida
+                                </button>
+                                <button id="ajusteTab" type="button" class="inline-flex flex-1 items-center text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-e-base text-sm px-3 py-2 focus:outline-none">
+                                    <i data-lucide="settings" class="w-4 h-4 me-1"></i>
+                                    Ajuste
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label data-slot="label"
+                                           name="NewUser.RoleId"
+                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                           for="role">
+                                        Artículo
+                                    </label>
+                                    <select name="NewUser.RoleId"
+                                            required
+                                            style="padding-right: 30px"
+                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
+                                            <option value="" selected hidden>Seleccionar artículo</option>
+                                        @foreach(var article in Model.Articles)
+                                        {
+                                            <option value="@article.Id">@article.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div>
+                                    <label data-slot="label"
+                                           name="NewUser.Status"
+                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                           for="status">
+                                        Almacén
+                                    </label>
+                                    <select name="NewUser.Status"
+                                            required
+                                            style="padding-right: 30px"
+                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
+                                            <option value="" selected hidden>Seleccionar almacén</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mt-5">
+                                <div id="cantidadInput">
+                                    <label name="NewUser.Username"
+                                           data-slot="label"
+                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                           for="username">
+                                        Cantidad
+                                    </label>
+                                    <input data-slot="input"
+                                           name="NewUser.Username"
+                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                           id="username"
+                                           type="number"
+                                           required />
+                                </div>
+                                <div id="precioInput">
+                                    <label data-slot="label"
+                                           name="NewUser.Email"
+                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                           for="email">
+                                        Precio Unitario (opcional)
+                                    </label>
+                                    <input data-slot="input"
+                                           name="NewUser.Email"
+                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                           id="email"
+                                           type="number" />
+                                </div>
+                                <div id="cantidadAjustesInput" class="hidden">
+                                    <label data-slot="label"
+                                           name="NewUser.Email"
+                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                           for="email">
+                                        Cantidad (+/- para ajustes)
+                                    </label>
+                                    <input data-slot="input"
+                                           name="NewUser.Email"
+                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                           id="email"
+                                           type="number" />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 gap-4 mt-5">
+                                <div>
+                                    <label data-slot="label"
+                                           name="NewUser.Name"
+                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                           for="firstName">
+                                        Motivo
+                                    </label>
+                                    <input data-slot="input"
+                                           name="NewUser.Name"
+                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                           id="firstName"
+                                           placeholder="Ej: Compra a proveedor, Venta a cliente, Productos dañados"
+                                           required />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 gap-4 mt-5">
+                                <div>
+                                    <label data-slot="label"
+                                           name="NewUser.Name"
+                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                           for="firstName">
+                                        Referencia (opcional)
+                                    </label>
+                                    <input data-slot="input"
+                                           name="NewUser.Name"
+                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                           id="firstName"
+                                           placeholder="Ej: PO-2024-001, SO-2024-015" />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 gap-4 mt-5">
+                                <div>
+                                    <label data-slot="label"
+                                           name="NewUser.Name"
+                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                           for="firstName">
+                                        Notas (opcional)
+                                    </label>
+                                    <textarea data-slot="input"
+                                           name="NewUser.Name"
+                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                           id="firstName"
+                                           placeholder="Información adicional..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
+                            <button id="close-btn" data-modal-hide="transaction-modal" type="button" class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-sidebar-accent hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100">Cancelar</button>
+                            <button id="create-btn" type="button" class="ms-3 text-white bg-primary hover:bg-sidebar-accent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div data-slot="card-content" class="px-6">
+        <div class="flex flex-col sm:flex-row gap-4 mb-6">
+            <div class="relative flex-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
+                <input data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive pl-10" placeholder="Buscar por artículo, almacén, motivo o referencia..." />
+            </div>
+            <div>
+                <select 
+                    @* name="NewUser.Status" *@
+                    required
+                    style="padding-right: 30px"
+                    class="border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 w-full sm:w-[180px]">
+                        <option value="" selected hidden>Todos los tipos</option>
+                        @* @foreach (var status in Model.Statuses)
+                        {
+                                <option value="@status.Code">@status.Description</option>
+                        } *@
+                </select>
+            </div>
+            <div>
+                <select 
+                    @* name="NewUser.Status" *@
+                    required
+                    style="padding-right: 30px"
+                    class="border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 w-full sm:w-[180px]">
+                        <option value="" selected hidden>Todos los alnacenes</option>
+                        @* @foreach (var status in Model.Statuses)
+                        {
+                                <option value="@status.Code">@status.Description</option>
+                        } *@
+                </select>
+            </div>
+            <div>
+                <select 
+                    @* name="NewUser.Status" *@
+                    required
+                    style="padding-right: 30px"
+                    class="border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 w-full sm:w-[180px]">
+                        <option value="" selected hidden>Todos</option>
+                        @* @foreach (var status in Model.Statuses)
+                        {
+                                <option value="@status.Code">@status.Description</option>
+                        } *@
+                </select>
+            </div>
+        </div>
+        <div data-slot="table-container" class="relative w-full overflow-x-auto">
+            <table data-slot="table" class="w-full caption-bottom text-sm">
+                <thead data-slot="table-header" class="[&_tr]:border-b">
+                    <tr data-slot="table-row" class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
+                        <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            Tipo
+                        </th>
+                        <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            Artículo
+                        </th>
+                        <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            Almacén
+                        </th>
+                        <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            Cantidad
+                        </th>
+                        <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            Valor
+                        </th>
+                        <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            Motivo
+                        </th>
+                        <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            Estado
+                        </th>
+                        <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            Fecha
+                        </th>
+                        <th data-slot="table-head" class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody data-slot="table-body" class="[&_tr:last-child]:border-0">
+                    <tr data-slot="table-row" class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
+                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-green-100 text-green-800">
+                                <div class="flex items-center gap-1">
+                                    <i data-lucide="circle-arrow-down" class="w-4 h-4"></i>
+                                    <span class="capitalize">inbound</span>
+                                </div>
+                            </span>
+                        </td>
+                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            <div>
+                                <p class="font-medium">Laptop Dell XPS 13</p>
+                                <p class="text-sm text-muted-foreground">LAP001</p>
+                            </div>
+                        </td>
+                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="building2" class="w-4 h-4 text-muted-foreground"></i>
+                                Almacén Central
+                            </div>
+                        </td>
+                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold">10</span>
+                            </div>
+                        </td>
+                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            <div class="flex items-center gap-2">
+                                <span class="font-medium">$12,000</span>
+                            </div>
+                        </td>
+                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            <div>
+                                <p class="text-sm">Compra a proveedor</p>
+                                <p class="text-xs text-muted-foreground">Ref: PO-2024-001</p>
+                            </div>
+                        </td>
+                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            <div>
+                                <p class="text-sm">Completado</p>
+                            </div>
+                        </td>
+                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            <div>
+                                <p class="text-sm">1/15/2024</p>
+                                <p class="text-xs text-muted-foreground">10:30 AM</p>
+                            </div>
+                        </td>
+                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            <button data-slot="button" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const entradaTab = document.querySelector("#entradaTab");
+        const salidaTab = document.querySelector("#salidaTab");
+        const ajusteTab = document.querySelector("#ajusteTab");
+
+        entradaTab.addEventListener("click", () => {
+            document.querySelector("#cantidadInput").classList.remove("hidden");
+            document.querySelector("#precioInput").classList.remove("hidden");
+            document.querySelector("#cantidadAjustesInput").classList.add("hidden");
+        })
+
+        salidaTab.addEventListener("click", () => {
+            document.querySelector("#cantidadInput").classList.remove("hidden");
+            document.querySelector("#precioInput").classList.remove("hidden");
+            document.querySelector("#cantidadAjustesInput").classList.add("hidden");
+        })
+
+        ajusteTab.addEventListener("click", () => {
+            document.querySelector("#cantidadInput").classList.add("hidden");
+            document.querySelector("#precioInput").classList.add("hidden");
+            document.querySelector("#cantidadAjustesInput").classList.remove("hidden");
+        })
+    })
+</script>
