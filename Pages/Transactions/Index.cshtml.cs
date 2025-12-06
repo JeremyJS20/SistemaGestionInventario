@@ -20,6 +20,7 @@ namespace SistemaGestionInventario.Pages.Transactions
         }
 
         public List<Article> Articles { get; set; }
+        public List<Warehouse> Warehouses { get; set; }
 
         public async Task OnGet()
         {
@@ -29,6 +30,7 @@ namespace SistemaGestionInventario.Pages.Transactions
             };
 
             Articles = await _context.Articles.ToListAsync();
+            Warehouses = await _context.Warehouses.ToListAsync();
         }
     }
 }

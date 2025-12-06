@@ -21,4 +21,6 @@ public partial class Organization
 
     public ICollection<OrganizationUserRole> OrganizationUserRole { get; set; } = new List<OrganizationUserRole>();
 
+    public ICollection<OrganizationWarehouse> OrganizationWarehouses { get; set; } = new List<OrganizationWarehouse>();
+
 }

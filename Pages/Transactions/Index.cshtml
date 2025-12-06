@@ -131,10 +131,10 @@
                                             style="padding-right: 30px"
                                             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
                                             <option value="" selected hidden>Seleccionar artículo</option>
-                                        @foreach(var article in Model.Articles)
-                                        {
-                                            <option value="@article.Id">@article.Name</option>
-                                        }
+                                            @foreach(var article in Model.Articles)
+                                            {
+                                                <option value="@article.Id">@article.Name</option>
+                                            }
                                     </select>
                                 </div>
                                 <div>
@@ -149,6 +149,10 @@
                                             style="padding-right: 30px"
                                             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
                                             <option value="" selected hidden>Seleccionar almacén</option>
+                                            @foreach (var warehouse in Model.Warehouses)
+                                            {
+                                                <option value="@warehouse.Id">@warehouse.Name</option>
+                                            }
                                     </select>
                                 </div>
                             </div>
@@ -165,6 +169,8 @@
                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
                                            id="username"
                                            type="number"
+                                           min="0"
+                                           value="0"
                                            required />
                                 </div>
                                 <div id="precioInput">
@@ -178,6 +184,8 @@
                                            name="NewUser.Email"
                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
                                            id="email"
+                                           min="0"
+                                           value="0"
                                            type="number" />
                                 </div>
                                 <div id="cantidadAjustesInput" class="hidden">
@@ -191,6 +199,8 @@
                                            name="NewUser.Email"
                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
                                            id="email"
+                                           min="0"
+                                           value="0"
                                            type="number" />
                                 </div>
                             </div>
