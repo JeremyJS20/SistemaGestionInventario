@@ -38,6 +38,8 @@ namespace SistemaGestionInventario.Data
 
         public virtual DbSet<Warehouse> Warehouses { get; set; }
 
+        public virtual DbSet<Transaction> Transactions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Organization>(entity =>
@@ -246,6 +248,21 @@ namespace SistemaGestionInventario.Data
                     .HasMaxLength(2)
                     .IsUnicode(false)
                     .HasDefaultValue("AC");
+            });
+
+            modelBuilder.Entity<Transaction>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK__Transact__3214EC076C68E165");
+
+                entity.Property(e => e.Motive)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+                entity.Property(e => e.Note)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+                entity.Property(e => e.Reference)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);
