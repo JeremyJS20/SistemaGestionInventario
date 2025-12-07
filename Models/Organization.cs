@@ -23,4 +23,8 @@ public partial class Organization
 
     public ICollection<OrganizationWarehouse> OrganizationWarehouses { get; set; } = new List<OrganizationWarehouse>();
 
+    public ICollection<OrganizationCategory> OrganizationCategories { get; set; } = new List<OrganizationCategory>();
+
+    public ICollection<OrganizationArticle> OrganizationArticles { get; set; } = new List<OrganizationArticle>();
+
 }

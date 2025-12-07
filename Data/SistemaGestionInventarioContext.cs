@@ -40,6 +40,10 @@ namespace SistemaGestionInventario.Data
 
         public virtual DbSet<Transaction> Transactions { get; set; }
 
+        public virtual DbSet<OrganizationCategory> OrganizationCategories { get; set; }
+
+        public virtual DbSet<OrganizationArticle> OrganizationArticles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Organization>(entity =>
@@ -190,9 +194,6 @@ namespace SistemaGestionInventario.Data
                 entity.Property(e => e.Description).IsUnicode(false);
                 entity.Property(e => e.Name).IsUnicode(false);
 
-                entity.HasOne(a => a.CategoryClass)
-                .WithOne(c => c.Article)
-                .HasForeignKey<Article>(a => a.Category);
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -201,7 +202,27 @@ namespace SistemaGestionInventario.Data
 
                 entity.ToTable("Category");
 
+                modelBuilder.Entity<Category>()
+                    .HasMany(c => c.Articles)
+                    .WithOne(a => a.CategoryClass)
+                    .HasForeignKey(a => a.Category)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+                entity.Property(e => e.Description)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+                entity.Property(e => e.Level)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasDefaultValue("PARENT");
                 entity.Property(e => e.Name).IsUnicode(false);
+                entity.Property(e => e.Status)
+                    .HasMaxLength(3)
+                    .IsUnicode(false)
+                    .HasDefaultValue("AC");
             });
 
             modelBuilder.Entity<OrganizationWarehouse>(entity =>
@@ -263,6 +284,40 @@ namespace SistemaGestionInventario.Data
                 entity.Property(e => e.Reference)
                     .HasMaxLength(500)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<OrganizationCategory>(entity =>
+            {
+                entity.HasKey(e => new { e.IdOrganization, e.IdCategory });
+
+                entity.HasOne(e => e.Organization)
+                    .WithMany(o => o.OrganizationCategories)
+                    .HasForeignKey(e => e.IdOrganization)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_organization_category");
+
+                entity.HasOne(e => e.Category)
+                    .WithMany()
+                    .HasForeignKey(e => e.IdCategory)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk2_organization_category");
+            });
+
+            modelBuilder.Entity<OrganizationArticle>(entity =>
+            {
+                entity.HasKey(e => new { e.IdOrganization, e.IdArticle });
+
+                entity.HasOne(e => e.Organization)
+                    .WithMany(o => o.OrganizationArticles)
+                    .HasForeignKey(e => e.IdOrganization)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_organization_article");
+
+                entity.HasOne(e => e.Article)
+                    .WithMany()
+                    .HasForeignKey(e => e.IdArticle)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk2_organization_article");
             });
 
             OnModelCreatingPartial(modelBuilder);

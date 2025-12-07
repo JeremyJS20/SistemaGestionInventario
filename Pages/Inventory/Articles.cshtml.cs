@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SistemaGestionInventario.Data;
 using SistemaGestionInventario.DTOs;
+using SistemaGestionInventario.Enums;
 using SistemaGestionInventario.Models;
 using SistemaGestionInventario.Pages.Shared.Types;
+using System.Security.Claims;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SistemaGestionInventario.Pages.Inventory
@@ -29,7 +31,6 @@ namespace SistemaGestionInventario.Pages.Inventory
 
         public IList<ArticleDto> BelowReorderPointArticlesDto { get; set; }
 
-
         public async Task OnGetAsync()
         {
             ViewData["ActivePage"] = "Articles";
@@ -37,11 +38,16 @@ namespace SistemaGestionInventario.Pages.Inventory
                 new RouteItem { Label = "Inventario > <strong>Gestión de Artículos</strong>" }
             };
 
-            Categories = await _context.Categories.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.Name,
-            }).ToListAsync();
+            var IdOrganization = int.Parse(User.FindFirstValue("SelectedOrganizationId")!);
+
+            Categories = await _context.OrganizationCategories
+                .Where(c => c.IdOrganization == IdOrganization && c.Category.Status == CommonStatusesEnum.AC.Code)
+                .Select(c => new SelectListItem
+                    {
+                        Value = c.Category.Id.ToString(),
+                        Text = c.Category.Name,
+                    }
+                ).ToListAsync();
 
             States = new List<SelectListItem>
             {
@@ -87,7 +93,7 @@ namespace SistemaGestionInventario.Pages.Inventory
 
             if (ArticleDto.Id == 0)
             {
-                await _context.Articles.AddAsync(new Models.Article
+                var NewArticleDb = await _context.Articles.AddAsync(new Models.Article
                 {
                     Code = ArticleDto.Code.ToUpper(),
                     Category = ArticleDto.Category,
@@ -98,6 +104,16 @@ namespace SistemaGestionInventario.Pages.Inventory
                     MinimumStock = ArticleDto.MinimumStock,
                     State = ArticleDto.State == "1",
                 });
+
+                await _context.SaveChangesAsync();
+
+                await _context.OrganizationArticles.AddAsync(new OrganizationArticle
+                {
+                    IdArticle = NewArticleDb.Entity.Id,
+                    IdOrganization = int.Parse(User.FindFirstValue("SelectedOrganizationId")!)
+                });
+
+                await _context.SaveChangesAsync();
             } else
             {
                 Article article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == ArticleDto.Id);
@@ -120,8 +136,12 @@ namespace SistemaGestionInventario.Pages.Inventory
 
         public async Task<List<ArticleDto>> GetArticles(string searchCode, int category)
         {
-            List<Category> categories = await _context.Categories.AsNoTracking().ToListAsync();
-            IQueryable<Article> articlesQuery = _context.Articles.AsNoTracking().Where(a => a.State).AsQueryable();
+            List<Category> categories = await _context.OrganizationCategories
+                .Where(oc => oc.IdOrganization == int.Parse(User.FindFirstValue("SelectedOrganizationId")!))
+                .AsNoTracking().Select(oc => oc.Category).ToListAsync();
+            IQueryable<Article> articlesQuery = _context.OrganizationArticles.
+                Where(oa => oa.IdOrganization == int.Parse(User.FindFirstValue("SelectedOrganizationId")!))
+                .AsNoTracking().Where(a => a.Article.State).Select(oa => oa.Article).AsQueryable();
 
             if (!string.IsNullOrEmpty(searchCode))
             {
