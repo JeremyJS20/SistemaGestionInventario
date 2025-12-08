@@ -24,6 +24,6 @@ public class IndexModel : PageModel
                 new RouteItem{Label="Dashboard"}
         };
 
-        return Page();
+        return RedirectToPage("/Inventory/Articles");
     }
 }
