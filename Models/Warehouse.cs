@@ -24,4 +24,7 @@ public partial class Warehouse
     public string ResponsibleName { get; set; } = null!;
 
     public string Status { get; set; } = null!;
+
+    public ICollection<WarehouseArticle> WarehouseArticles { get; set; } = new List<WarehouseArticle>();
+
 }

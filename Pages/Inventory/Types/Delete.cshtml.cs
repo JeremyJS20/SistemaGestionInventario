@@ -32,7 +32,7 @@ namespace SistemaGestionInventario.Pages.Inventory.Types
 
             if (CategoryToDelete == null)
             {
-                return RedirectToPage("/Warehouses/Index");
+                return RedirectToPage("/Inventory/Types/Index");
             }
 
             _context.OrganizationCategories.Remove(CategoryToDelete);

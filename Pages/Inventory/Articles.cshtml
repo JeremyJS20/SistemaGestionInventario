@@ -329,8 +329,12 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    const tableBody = document.querySelectorAll("tbody")[1]
+                    let tableBody = document.querySelectorAll("tbody")
                     const articleCount = document.querySelector("#articleCount")
+
+                    if(tableBody.length > 1) 
+                        tableBody = tableBody[1]
+                    else tableBody = tableBody[0]
 
                     let innerHtml = "";
                     data.forEach(article => {

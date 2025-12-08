@@ -25,4 +25,6 @@ public partial class Article
 
     public Category CategoryClass { get; set; }
 
+    public ICollection<WarehouseArticle> WarehouseArticles { get; set; } = new List<WarehouseArticle>();
+
 }

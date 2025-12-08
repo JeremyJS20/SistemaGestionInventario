@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using SistemaGestionInventario.DTOs;
 using SistemaGestionInventario.Models;
 using System.Security.Claims;
 using System.Text;
@@ -21,8 +19,12 @@ namespace SistemaGestionInventario.Pages.Reports.Articles.BelowReorderPoint
 
         public async Task<IActionResult> OnGetAsync()
         {
-            IList<Article> data = await _context.Articles
-                .Where(a => a.Stock < a.MinimumStock).ToListAsync();
+            IList<Article> data = await _context.OrganizationArticles.
+                Where(oa => oa.IdOrganization == int.Parse(User.FindFirstValue("SelectedOrganizationId")!))
+                .AsNoTracking()
+                .Select(oa => oa.Article)
+                .Where(a => a.State && a.Stock < a.MinimumStock)
+                .ToListAsync();
 
             var csv = new StringBuilder();
 
