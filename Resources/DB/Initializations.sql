@@ -216,3 +216,37 @@ drop table OrganizationWarehouses;
 select * from Warehouses;
 
 delete from Warehouses;
+
+select * from Transactions;
+
+select * from Category;
+
+alter table Category 
+add [Code] varchar(25) NULL,
+	[Description] varchar(100) NULL,
+	[Level] varchar(100) NOT NULL  DEFAULT 'PARENT' CONSTRAINT ck_lvl_categories CHECK ([LEVEL] IN ('PARENT', 'CHILD')),
+	ParentId int NULL,
+	[Status] VARCHAR(3) NOT NULL DEFAULT 'AC' CONSTRAINT ck_status_categories CHECK ([Status] IN ('AC', 'IN'));
+
+create table OrganizationCategories(
+	IdOrganization int not null constraint fk_organization_category foreign key references Organizations(id),
+	IdCategory int not null constraint fk2_organization_category foreign key references Category(Id)
+);
+
+Select * from Articles;
+
+create table OrganizationArticles(
+	IdOrganization int not null constraint fk_organization_article foreign key references Organizations(id),
+	IdArticle int not null constraint fk2_organization_article foreign key references Articles(Id)
+);
+
+create table WarehouseArticle(
+	IdWarehouse int not null constraint fk_warehouse_article foreign key references Warehouses(Id),
+	IdArticle int not null constraint fk2_warehouse_article foreign key references Articles(Id),
+	CurrentStock int not null,
+	MinimunStock int not null,
+	MaximunStock int not null,
+	Location varchar(15) not null
+);
+
+select * from WarehouseArticle;

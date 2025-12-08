@@ -44,6 +44,8 @@ namespace SistemaGestionInventario.Data
 
         public virtual DbSet<OrganizationArticle> OrganizationArticles { get; set; }
 
+        public virtual DbSet<WarehouseArticle> WarehouseArticles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Organization>(entity =>
@@ -318,6 +320,29 @@ namespace SistemaGestionInventario.Data
                     .HasForeignKey(e => e.IdArticle)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk2_organization_article");
+            });
+
+            modelBuilder.Entity<WarehouseArticle>(entity =>
+            {
+                entity.ToTable("WarehouseArticle");
+
+                entity.HasKey(e => new { e.IdWarehouse, e.IdArticle });
+
+                entity.Property(e => e.Location)
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
+                entity.HasOne(e => e.Warehouse)
+                    .WithMany(o => o.WarehouseArticles)
+                    .HasForeignKey(e => e.IdWarehouse)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_warehouse_article");
+
+                entity.HasOne(e => e.Article)
+                    .WithMany(o => o.WarehouseArticles)
+                    .HasForeignKey(e => e.IdArticle)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk2_warehouse_article");
             });
 
             OnModelCreatingPartial(modelBuilder);

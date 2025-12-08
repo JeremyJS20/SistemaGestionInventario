@@ -55,17 +55,18 @@ namespace SistemaGestionInventario.Pages.Inventory
                 new SelectListItem{ Value = "0", Text = "Inactivo" }
             };
 
-            this.BelowReorderPointArticlesDto = await _context.Articles
-                .Where(a => a.Stock < a.MinimumStock)
+            this.BelowReorderPointArticlesDto = await _context.OrganizationArticles.
+                Where(oa => oa.IdOrganization == int.Parse(User.FindFirstValue("SelectedOrganizationId")!))
+                .AsNoTracking().Where(a => a.Article.State && a.Article.Stock < a.Article.MinimumStock)
                 .Select(a => new ArticleDto
                 {
-                    Code = a.Code,
-                    Name = a.Name,
-                    Category = a.Category,
-                    CategoryName = a.CategoryClass.Name,
-                    Price = a.Price,
-                    Stock = a.Stock,
-                    MinimumStock = a.MinimumStock
+                    Code = a.Article.Code,
+                    Name = a.Article.Name,
+                    Category = a.Article.Category,
+                    CategoryName = a.Article.CategoryClass.Name,
+                    Price = a.Article.Price,
+                    Stock = a.Article.Stock,
+                    MinimumStock = a.Article.MinimumStock
                 }).ToListAsync();
 
             await RefreshData();
@@ -198,9 +199,13 @@ namespace SistemaGestionInventario.Pages.Inventory
 
         public async Task RefreshData()
         {
-            Total = await _context.Articles.CountAsync();
-            Activos = await _context.Articles.Where(a => a.State).CountAsync();
-            StockBajo = await _context.Articles.Where(a => a.Stock <= a.MinimumStock).CountAsync();
+            var Articles = _context.OrganizationArticles
+                .Where(oa => oa.IdOrganization == int.Parse(User.FindFirstValue("SelectedOrganizationId")!))
+                .AsNoTracking().Select(oa => oa.Article);
+
+            Total = Articles.Count();
+            Activos = Articles.Where(a => a.State).Count();
+            StockBajo = Articles.Where(a => a.Stock <= a.MinimumStock).Count();
         }
     }
 }
