@@ -10,7 +10,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-muted-foreground">Total Transacciones</p>
-                    <p class="text-2xl font-bold text-foreground">4</p>
+                    <p class="text-2xl font-bold text-foreground">@Model.Total</p>
                 </div>
                 <i data-lucide="package" class="w-8 h-8 text-blue-500"></i>
             </div>
@@ -21,7 +21,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-muted-foreground">Entradas</p>
-                    <p class="text-2xl font-bold text-green-600">2</p>
+                    <p class="text-2xl font-bold text-green-600">@Model.Inbound</p>
                 </div>
                 <i data-lucide="circle-arrow-down" class="w-8 h-8 text-green-600"></i>
             </div>
@@ -32,7 +32,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-muted-foreground">Salidas</p>
-                    <p class="text-2xl font-bold text-red-600">1</p>
+                    <p class="text-2xl font-bold text-red-600">@Model.Outbound</p>
                 </div>
                 <i data-lucide="circle-arrow-up" class="w-8 h-8 text-red-600"></i>
             </div>
@@ -43,7 +43,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-muted-foreground">Ajustes</p>
-                    <p class="text-2xl font-bold text-yellow-500">1</p>
+                    <p class="text-2xl font-bold text-yellow-500">@Model.Adjustment</p>
                 </div>
                 <i data-lucide="settings" class="w-8 h-8 text-yellow-500"></i>
             </div>
@@ -54,7 +54,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-muted-foreground">Pendientes</p>
-                    <p class="text-2xl font-bold text-orange-600">1</p>
+                    <p class="text-2xl font-bold text-orange-600">@Model.Pending</p>
                 </div>
                 <i data-lucide="calendar" class="w-8 h-8 text-orange-600"></i>
             </div>
@@ -104,152 +104,153 @@
                             </button>
                         </div>
                         <div class="p-4 md:p-5 space-y-4">
-                            <div class="inline-flex rounded-base shadow-xs -space-x-px w-full text-center" role="group">
-                                <button id="entradaTab" type="button" class="inline-flex flex-1 items-center text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-s-base text-sm px-3 py-2 focus:outline-none">
-                                    <i data-lucide="circle-arrow-down" class="w-4 h-4 me-1"></i>
-                                    Entrada
-                                </button>
-                                <button id="salidaTab" type="button" class="inline-flex flex-1 items-center text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 text-sm px-3 py-2 focus:outline-none">
-                                    <i data-lucide="circle-arrow-up" class="w-4 h-4 me-1"></i>
-                                    Salida
-                                </button>
-                                <button id="ajusteTab" type="button" class="inline-flex flex-1 items-center text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-e-base text-sm px-3 py-2 focus:outline-none">
-                                    <i data-lucide="settings" class="w-4 h-4 me-1"></i>
-                                    Ajuste
-                                </button>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label data-slot="label"
-                                           name="NewUser.RoleId"
-                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                           for="role">
-                                        Artículo
-                                    </label>
-                                    <select name="NewUser.RoleId"
-                                            required
-                                            style="padding-right: 30px"
-                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
+                            <form id="transactionForm" method="post">
+                                <div class="inline-flex rounded-base shadow-xs -space-x-px w-full text-center" role="group">
+                                    <input asp-for="TransactionDto.Id" type="hidden" value="0" />
+                                    <input asp-for="TransactionDto.Type" type="hidden" value="0" />
+                                    <button id="entradaTab" type="button" class="inline-flex flex-1 items-center text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-s-base text-sm px-3 py-2 focus:outline-none">
+                                        <i data-lucide="circle-arrow-down" class="w-4 h-4 me-1"></i>
+                                        Entrada
+                                    </button>
+                                    <button id="salidaTab" type="button" class="inline-flex flex-1 items-center text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 text-sm px-3 py-2 focus:outline-none">
+                                        <i data-lucide="circle-arrow-up" class="w-4 h-4 me-1"></i>
+                                        Salida
+                                    </button>
+                                    <button id="ajusteTab" type="button" class="inline-flex flex-1 items-center text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-e-base text-sm px-3 py-2 focus:outline-none">
+                                        <i data-lucide="settings" class="w-4 h-4 me-1"></i>
+                                        Ajuste
+                                    </button>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 mt-5">
+                                    <div>
+                                        <label data-slot="label"
+                                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                               for="role">
+                                            Artículo
+                                        </label>
+                                        <select asp-for="TransactionDto.ArticleId"
+                                                required
+                                                style="padding-right: 30px"
+                                                class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
                                             <option value="" selected hidden>Seleccionar artículo</option>
-                                            @foreach(var article in Model.Articles)
+                                            @foreach (var article in Model.Articles)
                                             {
                                                 <option value="@article.Id">@article.Name</option>
                                             }
-                                    </select>
-                                </div>
-                                <div>
-                                    <label data-slot="label"
-                                           name="NewUser.Status"
-                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                           for="status">
-                                        Almacén
-                                    </label>
-                                    <select name="NewUser.Status"
-                                            required
-                                            style="padding-right: 30px"
-                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
+                                        </select>
+                                        <span asp-validation-for="TransactionDto.ArticleId" class="text-red-600"></span>
+                                    </div>
+                                    <div>
+                                        <label data-slot="label"
+                                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                               for="status">
+                                            Almacén
+                                        </label>
+                                        <select asp-for="TransactionDto.WarehouseId"
+                                                required
+                                                style="padding-right: 30px"
+                                                class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
                                             <option value="" selected hidden>Seleccionar almacén</option>
                                             @foreach (var warehouse in Model.Warehouses)
                                             {
                                                 <option value="@warehouse.Id">@warehouse.Name</option>
                                             }
-                                    </select>
+                                        </select>
+                                        <span asp-validation-for="TransactionDto.WarehouseId" class="text-red-600"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4 mt-5">
-                                <div id="cantidadInput">
-                                    <label name="NewUser.Username"
-                                           data-slot="label"
-                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                           for="username">
-                                        Cantidad
-                                    </label>
-                                    <input data-slot="input"
-                                           name="NewUser.Username"
-                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-                                           id="username"
-                                           type="number"
-                                           min="0"
-                                           value="0"
-                                           required />
+                                <div class="grid grid-cols-2 gap-4 mt-5">
+                                    <div id="cantidadInput">
+                                        <label data-slot="label"
+                                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                               for="username">
+                                            Cantidad
+                                        </label>
+                                        <input data-slot="input"
+                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                            type="number"
+                                            min="0"
+                                            value="0"
+                                            asp-for="TransactionDto.Amount"
+                                        />
+                                        <span asp-validation-for="TransactionDto.Amount" class="text-red-600"></span>
+                                    </div>
+                                    <div id="precioInput">
+                                        <label data-slot="label"
+                                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                               for="email">
+                                            Precio Unitario (opcional)
+                                        </label>
+                                        <input data-slot="input"
+                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                            min="0"
+                                            value="0"
+                                            type="number"
+                                            asp-for="TransactionDto.UnitPrice"
+                                        />
+                                        <span asp-validation-for="TransactionDto.UnitPrice" class="text-red-600"></span>
+                                    </div>
+                                    <div id="cantidadAjustesInput" class="hidden">
+                                        <label data-slot="label"
+                                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                               for="email">
+                                            Cantidad (+/- para ajustes)
+                                        </label>
+                                        <input data-slot="input"
+                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                            min="0"
+                                            value="0"
+                                            type="number" 
+                                            asp-for="TransactionDto.AdjustmentAmount"
+                                        />
+                                        <span asp-validation-for="TransactionDto.AdjustmentAmount" class="text-red-600"></span>
+                                    </div>
                                 </div>
-                                <div id="precioInput">
-                                    <label data-slot="label"
-                                           name="NewUser.Email"
-                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                           for="email">
-                                        Precio Unitario (opcional)
-                                    </label>
-                                    <input data-slot="input"
-                                           name="NewUser.Email"
-                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-                                           id="email"
-                                           min="0"
-                                           value="0"
-                                           type="number" />
+                                <div class="grid grid-cols-1 gap-4 mt-5">
+                                    <div>
+                                        <label data-slot="label"
+                                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                               for="firstName">
+                                            Motivo
+                                        </label>
+                                        <input data-slot="input"
+                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                            placeholder="Ej: Compra a proveedor, Venta a cliente, Productos dañados"
+                                            asp-for="TransactionDto.Motive"
+                                        />
+                                        <span asp-validation-for="TransactionDto.Motive" class="text-red-600"></span>
+                                    </div>
                                 </div>
-                                <div id="cantidadAjustesInput" class="hidden">
-                                    <label data-slot="label"
-                                           name="NewUser.Email"
-                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                           for="email">
-                                        Cantidad (+/- para ajustes)
-                                    </label>
-                                    <input data-slot="input"
-                                           name="NewUser.Email"
-                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-                                           id="email"
-                                           min="0"
-                                           value="0"
-                                           type="number" />
+                                <div class="grid grid-cols-1 gap-4 mt-5">
+                                    <div>
+                                        <label data-slot="label"
+                                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                               for="firstName">
+                                            Referencia (opcional)
+                                        </label>
+                                        <input data-slot="input"
+                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                            placeholder="Ej: PO-2024-001, SO-2024-015"
+                                            asp-for="TransactionDto.Reference"
+                                        />
+                                        <span asp-validation-for="TransactionDto.Reference" class="text-red-600"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="grid grid-cols-1 gap-4 mt-5">
-                                <div>
-                                    <label data-slot="label"
-                                           name="NewUser.Name"
-                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                           for="firstName">
-                                        Motivo
-                                    </label>
-                                    <input data-slot="input"
-                                           name="NewUser.Name"
-                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-                                           id="firstName"
-                                           placeholder="Ej: Compra a proveedor, Venta a cliente, Productos dañados"
-                                           required />
+                                <div class="grid grid-cols-1 gap-4 mt-5">
+                                    <div>
+                                        <label data-slot="label"
+                                               class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                                               for="firstName">
+                                            Notas (opcional)
+                                        </label>
+                                        <textarea data-slot="input"
+                                            class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                                            placeholder="Información adicional..."
+                                        asp-for="TransactionDto.Note"></textarea>
+                                        <span asp-validation-for="TransactionDto.Note" class="text-red-600"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="grid grid-cols-1 gap-4 mt-5">
-                                <div>
-                                    <label data-slot="label"
-                                           name="NewUser.Name"
-                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                           for="firstName">
-                                        Referencia (opcional)
-                                    </label>
-                                    <input data-slot="input"
-                                           name="NewUser.Name"
-                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-                                           id="firstName"
-                                           placeholder="Ej: PO-2024-001, SO-2024-015" />
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 gap-4 mt-5">
-                                <div>
-                                    <label data-slot="label"
-                                           name="NewUser.Name"
-                                           class="flex items-center gap-2 pb-1 text-sm leading-none font-semibold select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                           for="firstName">
-                                        Notas (opcional)
-                                    </label>
-                                    <textarea data-slot="input"
-                                           name="NewUser.Name"
-                                           class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-                                           id="firstName"
-                                           placeholder="Información adicional..."></textarea>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                         <div class="flex justify-end items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
                             <button id="close-btn" data-modal-hide="transaction-modal" type="button" class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-sidebar-accent hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100">Cancelar</button>
@@ -340,88 +341,241 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody data-slot="table-body" class="[&_tr:last-child]:border-0">
-                    <tr data-slot="table-row" class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
-                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                            <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-green-100 text-green-800">
-                                <div class="flex items-center gap-1">
-                                    <i data-lucide="circle-arrow-down" class="w-4 h-4"></i>
-                                    <span class="capitalize">inbound</span>
-                                </div>
-                            </span>
-                        </td>
-                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                            <div>
-                                <p class="font-medium">Laptop Dell XPS 13</p>
-                                <p class="text-sm text-muted-foreground">LAP001</p>
-                            </div>
-                        </td>
-                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="building2" class="w-4 h-4 text-muted-foreground"></i>
-                                Almacén Central
-                            </div>
-                        </td>
-                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                            <div class="flex items-center gap-2">
-                                <span class="font-semibold">10</span>
-                            </div>
-                        </td>
-                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                            <div class="flex items-center gap-2">
-                                <span class="font-medium">$12,000</span>
-                            </div>
-                        </td>
-                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                            <div>
-                                <p class="text-sm">Compra a proveedor</p>
-                                <p class="text-xs text-muted-foreground">Ref: PO-2024-001</p>
-                            </div>
-                        </td>
-                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                            <div>
-                                <p class="text-sm">Completado</p>
-                            </div>
-                        </td>
-                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                            <div>
-                                <p class="text-sm">1/15/2024</p>
-                                <p class="text-xs text-muted-foreground">10:30 AM</p>
-                            </div>
-                        </td>
-                        <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                            <button data-slot="button" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5">
-                                <i data-lucide="eye" class="w-4 h-4"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
+                <tbody data-slot="table-body" class="[&_tr:last-child]:border-0"></tbody>
             </table>
         </div>
     </div>
 </div>
+
+<form id="updateForm" method="post" asp-page-handler="TransactionState">
+    <input type="hidden" name="id" id="deleteId" />
+    <input type="hidden" name="state" id="deleteState" />
+    @Html.AntiForgeryToken()
+</form>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+
+        const transactionTypeInput = document.querySelector("#TransactionDto_Type");
+
         const entradaTab = document.querySelector("#entradaTab");
         const salidaTab = document.querySelector("#salidaTab");
         const ajusteTab = document.querySelector("#ajusteTab");
 
+        const cantidadInput = document.querySelector("#cantidadInput");
+        const precioInput = document.querySelector("#precioInput");
+        const cantidadAjustesInput = document.querySelector("#cantidadAjustesInput");
+
+        const createBtn = document.querySelector('#create-btn');
+        let form = document.querySelector('#transactionForm');
+        let closeBtn = document.querySelector('#close-btn');
+        let cancelBtn = document.querySelector('#cancel-btn');
+
         entradaTab.addEventListener("click", () => {
-            document.querySelector("#cantidadInput").classList.remove("hidden");
-            document.querySelector("#precioInput").classList.remove("hidden");
-            document.querySelector("#cantidadAjustesInput").classList.add("hidden");
+            cantidadInput.classList.remove("hidden");
+            cantidadInput.children[1].value = 0;
+
+            precioInput.classList.remove("hidden");
+            precioInput.children[1].value = 0;
+
+            cantidadAjustesInput.classList.add("hidden");
+            cantidadAjustesInput.children[1].value = 0;
+
+            transactionTypeInput.value = 0;
         })
 
         salidaTab.addEventListener("click", () => {
-            document.querySelector("#cantidadInput").classList.remove("hidden");
-            document.querySelector("#precioInput").classList.remove("hidden");
-            document.querySelector("#cantidadAjustesInput").classList.add("hidden");
+            cantidadInput.classList.remove("hidden");
+            cantidadInput.children[1].value = 0;
+
+            precioInput.classList.remove("hidden");
+            precioInput.children[1].value = 0;
+            
+            cantidadAjustesInput.classList.add("hidden");
+            cantidadAjustesInput.children[1].value = 0;
+            
+            transactionTypeInput.value = 1;
         })
 
         ajusteTab.addEventListener("click", () => {
-            document.querySelector("#cantidadInput").classList.add("hidden");
-            document.querySelector("#precioInput").classList.add("hidden");
-            document.querySelector("#cantidadAjustesInput").classList.remove("hidden");
+            cantidadInput.classList.add("hidden");
+            cantidadInput.children[1].value = 0;
+
+            precioInput.classList.add("hidden");
+            precioInput.children[1].value = 0;
+            
+            cantidadAjustesInput.classList.remove("hidden");
+            cantidadAjustesInput.children[1].value = 0;
+            
+            transactionTypeInput.value = 2;
         })
+
+        createBtn.addEventListener('click', () => {
+            form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        })
+
+        closeBtn.addEventListener('click', () => {
+            form.reset();
+
+            const validationMessages = form.querySelectorAll(".text-red-600");
+            validationMessages.forEach(el => el.textContent = "");
+        })
+
+        cancelBtn.addEventListener('click', () => {
+            form.reset();
+
+            const validationMessages = form.querySelectorAll(".text-red-600");
+            validationMessages.forEach(el => el.textContent = "");
+        })
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            let form = e.target;
+            let formData = new FormData(form);
+
+            fetch(form.action + '?handler=Endpoint', {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': formData.get('__RequestVerificationToken')
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                form.querySelectorAll('[data-valmsg-for]').forEach(el => {
+                    el.textContent = '';
+                });
+
+                if (result.success) {
+                    window.location.reload();
+                } else {
+                    for (let field in result.errors) {
+                        let msg = result.errors[field];
+                        let span = form.querySelector(`[data-valmsg-for="${field}"]`);
+                        if (span) {
+                            span.textContent = msg;
+                        }
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Submit error', err);
+            });
+        });
+
+        const fillTable = (searchCode, category) => {
+            fetch(`@Url.Page("", "TransactionTable")`, {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelectorAll("tbody")[0]
+
+                let innerHtml = "";
+                data.forEach(transaction => {
+                    innerHtml += `
+                        <tr data-slot="table-row" class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
+                            <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                ${
+                                    transaction.type == 0 ? `
+                                        <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-green-100 text-green-800">
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-arrow-down-icon lucide-circle-arrow-down w-4 h-4"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg>
+                                                <span class="capitalize">inbound</span>
+                                            </div>
+                                        </span>
+                                    ` : transaction.type == 1 ? `
+                                        <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-red-100 text-red-800">
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-arrow-up-icon lucide-circle-arrow-up w-4 h-4"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="M12 16V8"/></svg>
+                                                <span class="capitalize">outbound</span>
+                                            </div>
+                                        </span>
+                                    ` : `
+                                        <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-yellow-100 text-yellow-800">
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings w-4 h-4"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+                                                <span class="capitalize">adjustment</span>
+                                            </div>
+                                        </span>
+                                    `
+                                }
+                            </td>
+                            <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                <div>
+                                    <p class="font-medium">${transaction.article.name}</p>
+                                    <p class="text-sm text-muted-foreground">${transaction.article.code}</p>
+                                </div>
+                            </td>
+                            <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building2-icon lucide-building-2 w-4 h-4"><path d="M10 12h4"/><path d="M10 8h4"/><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/></svg>
+                                    ${transaction.warehouse.name}
+                                </div>
+                            </td>
+                            <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold">${transaction.amount}</span>
+                                </div>
+                            </td>
+                            <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-medium">$${transaction.unitPrice}</span>
+                                </div>
+                            </td>
+                            <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                <div>
+                                        <p class="text-sm">${transaction.motive}</p>
+                                        <p class="text-xs text-muted-foreground">${transaction.reference ?? ""}</p>
+                                </div>
+                            </td>
+                            <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                <div>
+                                    <div>
+                                        <select
+                                                required
+                                                style="padding-right: 30px"
+                                                data-id="${transaction.id}"
+                                                class="status-select file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 rounded-md border-none bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
+                                            <option value="0" ${transaction.state == 0 ? "selected" : ""}>Pendiente</option>
+                                            <option value="1" ${transaction.state == 1 ? "selected" : ""}>Completado</option>
+                                            <option value="2" ${transaction.state == 2 ? "selected" : ""}>Cancelado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                            <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                <div>
+                                    <p class="text-sm">${(new Date(transaction.date)).toLocaleDateString()}</p>
+                                    <p class="text-xs text-muted-foreground">${(new Date(transaction.date)).toLocaleTimeString()}</p>
+                                </div>
+                            </td>
+                            <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                <button data-slot="button" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye w-4 h-4"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    `
+                })
+
+                tableBody.innerHTML = innerHtml;
+
+                document.querySelectorAll('.status-select').forEach(select => {
+                    select.addEventListener("input", e => {
+                        const id = select.getAttribute('data-id');
+                        const state = e.target.value;
+
+                        document.querySelector("#deleteId").value = id;
+                        document.querySelector("#deleteState").value = state;
+
+                        document.querySelector('#updateForm').submit();
+                    })
+                })
+            })
+        }
+
+        fillTable();
     })
 </script>

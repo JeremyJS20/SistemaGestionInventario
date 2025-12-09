@@ -24,4 +24,8 @@ public partial class Transaction
     public string? Reference { get; set; }
 
     public string? Note { get; set; }
+
+    public int? State { get; set; }
+
+    public DateTime? Date { get; set; }
 }
