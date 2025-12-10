@@ -9,10 +9,11 @@ using SistemaGestionInventario.DTOs;
 using SistemaGestionInventario.Enums;
 using SistemaGestionInventario.Models;
 using SistemaGestionInventario.Pages.Shared.Types;
+using System.Security.Claims;
 
 namespace SistemaGestionInventario.Pages.Transactions
 {
-    //[Authorize(Policy = "Permission.TRSCTN")]
+    [Authorize(Policy = "Permission.TRSCTN")]
     public class IndexModel : PageModel
     {
         [BindProperty]
@@ -39,8 +40,19 @@ namespace SistemaGestionInventario.Pages.Transactions
                 new RouteItem { Label = "Inventario > <strong>Transacciones</strong>" }
             };
 
-            Articles = await _context.Articles.Where(a => a.State).AsNoTracking().ToListAsync();
-            Warehouses = await _context.Warehouses.AsNoTracking().ToListAsync();
+            var OrganizationId = int.Parse(User.FindFirstValue("SelectedOrganizationId")!);
+
+            Articles = await _context.OrganizationArticles
+                .Include(r => r.Article)
+                .Where(r => r.IdOrganization == OrganizationId && r.Article.State)
+                .Select(r => r.Article)
+                .ToListAsync();
+
+            Warehouses = await _context.OrganizationWarehouses
+                .Include(r => r.Warehouse)
+                .Where(r => r.IdOrganization == OrganizationId && r.Warehouse.Status == CommonStatusesEnum.AC.Code)
+                .Select(r => r.Warehouse)
+                .ToListAsync();
 
             var transactions = await _context.Transactions.ToListAsync();
             Total = transactions.Count();
