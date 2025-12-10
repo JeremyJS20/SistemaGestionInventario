@@ -266,45 +266,40 @@
         <div class="flex flex-col sm:flex-row gap-4 mb-6">
             <div class="relative flex-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
-                <input data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive pl-10" placeholder="Buscar por artículo, almacén, motivo o referencia..." />
+                <input id="searchInput" data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive pl-10" placeholder="Buscar por artículo, almacén, motivo o referencia..." />
             </div>
             <div>
                 <select 
-                    @* name="NewUser.Status" *@
-                    required
                     style="padding-right: 30px"
+                    id="typeSelect"
                     class="border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 w-full sm:w-[180px]">
-                        <option value="" selected hidden>Todos los tipos</option>
-                        @* @foreach (var status in Model.Statuses)
-                        {
-                                <option value="@status.Code">@status.Description</option>
-                        } *@
+                        <option value="-1" selected>Todos los tipos</option>
+                        <option value="0">Entradas</option>
+                        <option value="1">Salidas</option>
+                        <option value="2">Ajustes</option>
                 </select>
             </div>
             <div>
                 <select 
-                    @* name="NewUser.Status" *@
-                    required
                     style="padding-right: 30px"
+                    id="warehouseSelect"
                     class="border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 w-full sm:w-[180px]">
-                        <option value="" selected hidden>Todos los alnacenes</option>
-                        @* @foreach (var status in Model.Statuses)
+                        <option value="-1" selected>Todos los almacenes</option>
+                        @foreach (var warehouse in Model.Warehouses)
                         {
-                                <option value="@status.Code">@status.Description</option>
-                        } *@
+                            <option value="@warehouse.Id">@warehouse.Name</option>
+                        }
                 </select>
             </div>
             <div>
-                <select 
-                    @* name="NewUser.Status" *@
-                    required
+                <select
                     style="padding-right: 30px"
+                    id="stateSelect"
                     class="border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 w-full sm:w-[180px]">
-                        <option value="" selected hidden>Todos</option>
-                        @* @foreach (var status in Model.Statuses)
-                        {
-                                <option value="@status.Code">@status.Description</option>
-                        } *@
+                        <option value="-1" selected>Todos</option>
+                        <option value="0">Pendiente</option>
+                        <option value="1">Completado</option>
+                        <option value="2">Cancelado</option>
                 </select>
             </div>
         </div>
@@ -353,6 +348,101 @@
     @Html.AntiForgeryToken()
 </form>
 
+<button id="action-btn" data-modal-target="action-modal" data-modal-toggle="action-modal" type="button" class="hidden bg-primary hover:bg-primary/90 cursor-pointer flex items-center space-x-2 text-primary-foreground px-4 py-2 rounded">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         class="h-5 w-5">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 4v16m8-8H4" />
+    </svg>
+    <span>Vista</span>
+</button>
+<div id="action-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4">
+        <div class="relative bg-white rounded-lg shadow-sm">
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+                <div data-slot="dialog-header" class="flex flex-col gap-2 sm:text-left">
+                    <h2 data-slot="dialog-title" class="text-lg leading-none font-semibold">
+                        Detalles de Transacción
+                    </h2>
+                    <p data-slot="dialog-description" class="text-muted-foreground text-sm">
+                        Información completa de la transacción
+                    </p>
+                </div>
+                <button id="cancel-btn" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="action-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <div class="p-4 md:p-5 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-medium text-muted-foreground">
+                            Tipo
+                        </label>
+                        <div id="actionType"></div>
+                    </div>
+                    <div>
+                        <label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-medium text-muted-foreground">
+                            Estado
+                        </label>
+                        <div id="actionState"></div>
+                    </div>
+                </div>
+                <div>
+                    <label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-medium text-muted-foreground">
+                        Artículo
+                    </label>
+                    <p id="actionArticle" class="font-medium">Soy el articulo</p>
+                </div>
+                <div>
+                    <label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-medium text-muted-foreground">
+                        Almacén
+                    </label>
+                    <p id="actionWarehouse">Soy el almacen</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-medium text-muted-foreground">
+                            Cantidad
+                        </label>
+                        <p id="actionAmount" class="font-semibold">15</p>
+                    </div>
+                    <div id="actionUnitPriceContainer">
+                        <label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-medium text-muted-foreground">
+                            Valor Total
+                        </label>
+                        <p class="font-semibold">$<span id="actionUnitPrice">15</span></p>
+                    </div>
+                </div>
+                <div>
+                    <label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-medium text-muted-foreground">
+                        Motivo
+                    </label>
+                    <p id="actionMotive">Motivo</p>
+                </div>
+                <div>
+                    <label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-medium text-muted-foreground">
+                        Referencia
+                    </label>
+                    <p id="actionReference">Referencia</p>
+                </div>
+                <div>
+                    <label data-slot="label" class="flex items-center gap-2 select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-sm font-medium text-muted-foreground">
+                        Fecha
+                    </label>
+                    <p id="actionDate">1/12/2024</p>
+                    <p id="actionTime" class="text-sm text-muted-foreground">04:45 PM</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
 
@@ -370,6 +460,11 @@
         let form = document.querySelector('#transactionForm');
         let closeBtn = document.querySelector('#close-btn');
         let cancelBtn = document.querySelector('#cancel-btn');
+
+        let searchInput = document.querySelector('#searchInput');
+        let typeSelect = document.querySelector('#typeSelect');
+        let warehouseSelect = document.querySelector('#warehouseSelect');
+        let stateSelect = document.querySelector('#stateSelect');
 
         entradaTab.addEventListener("click", () => {
             cantidadInput.classList.remove("hidden");
@@ -464,8 +559,8 @@
             });
         });
 
-        const fillTable = (searchCode, category) => {
-            fetch(`@Url.Page("", "TransactionTable")`, {
+        const fillTable = (search, type, warehouseId, state) => {
+            fetch(`@Url.Page("", "TransactionTable")&search=${search}&type=${type}&warehouseId=${warehouseId}&state=${state}`, {
                 method: 'GET',
             })
             .then(response => response.json())
@@ -521,7 +616,7 @@
                             </td>
                             <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
                                 <div class="flex items-center gap-2">
-                                    <span class="font-medium">$${transaction.unitPrice}</span>
+                                    <span class="font-medium">${(transaction.type == 2 ? '-' : '$'+transaction.unitPrice)}</span>
                                 </div>
                             </td>
                             <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
@@ -552,7 +647,7 @@
                                 </div>
                             </td>
                             <td data-slot="table-cell" class="p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                                <button data-slot="button" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5">
+                                <button data-id="${transaction.id}" data-slot="button" class="action-btn inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye w-4 h-4"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
                                 </button>
                             </td>
@@ -573,9 +668,95 @@
                         document.querySelector('#updateForm').submit();
                     })
                 })
+
+                document.querySelectorAll('.action-btn').forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        const id = btn.getAttribute('data-id');
+
+                        fetch(`@Url.Page("", "Transaction")&id=${id}`, {
+                            method: 'GET',
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            document.querySelector("#actionType").innerHTML = data.type == 0 ? `
+                                        <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-green-100 text-green-800">
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-arrow-down-icon lucide-circle-arrow-down w-4 h-4"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg>
+                                                <span class="capitalize">inbound</span>
+                                            </div>
+                                        </span>
+                                    ` : data.type == 1 ? `
+                                        <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-red-100 text-red-800">
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-arrow-up-icon lucide-circle-arrow-up w-4 h-4"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="M12 16V8"/></svg>
+                                                <span class="capitalize">outbound</span>
+                                            </div>
+                                        </span>
+                                    ` : `
+                                        <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-yellow-100 text-yellow-800">
+                                            <div class="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings w-4 h-4"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+                                                <span class="capitalize">adjustment</span>
+                                            </div>
+                                        </span>
+                                    `;
+                            document.querySelector("#actionState").innerHTML = data.state == 1 ? `
+                                        <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-green-100 text-green-800">
+                                            <div class="flex items-center gap-1">
+                                                <span class="capitalize">Completado</span>
+                                            </div>
+                                        </span>
+                                    ` : data.state == 2 ? `
+                                        <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-red-100 text-red-800">
+                                            <div class="flex items-center gap-1">
+                                                <span class="capitalize">Cancelado</span>
+                                            </div>
+                                        </span>
+                                    ` : `
+                                        <span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-yellow-100 text-yellow-800">
+                                            <div class="flex items-center gap-1">
+                                                <span class="capitalize">Pendiente</span>
+                                            </div>
+                                        </span>
+                                    `;
+                            document.querySelector("#actionArticle").innerHTML = data.article.name;
+                            document.querySelector("#actionWarehouse").innerHTML = data.warehouse.name;
+                            document.querySelector("#actionAmount").innerHTML = data.amount;
+                            document.querySelector("#actionUnitPrice").innerHTML = data.unitPrice;
+                            document.querySelector("#actionMotive").innerHTML = data.motive;
+                            document.querySelector("#actionReference").innerHTML = data.reference;
+                            document.querySelector("#actionDate").innerHTML = (new Date(data.date)).toLocaleDateString();
+                            document.querySelector("#actionTime").innerHTML = (new Date(data.date)).toLocaleTimeString();
+
+                            if (data.type == 2) {
+                                document.querySelector("#actionUnitPriceContainer").classList.add("hidden");
+                            } else {
+                                document.querySelector("#actionUnitPriceContainer").classList.remove("hidden");
+                            }
+
+                            document.querySelector("#action-btn").click();
+                        })
+                    })
+                })
             })
         }
 
-        fillTable();
+        fillTable("", -1, -1, -1);
+
+        searchInput.addEventListener('input', (e) => {
+            fillTable(e.target.value, typeSelect.value, warehouseSelect.value, stateSelect.value);
+        })
+
+        typeSelect.addEventListener('input', (e) => {
+            fillTable(searchInput.value, e.target.value, warehouseSelect.value, stateSelect.value);
+        })
+
+        warehouseSelect.addEventListener('input', (e) => {
+            fillTable(searchInput.value, typeSelect.value, e.target.value, stateSelect.value);
+        })
+
+        stateSelect.addEventListener('input', (e) => {
+            fillTable(searchInput.value, typeSelect.value, warehouseSelect.value, e.target.value);
+        })
     })
 </script>
