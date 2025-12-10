@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Mono.TextTemplating;
 using SistemaGestionInventario.Data;
 using SistemaGestionInventario.DTOs;
 using SistemaGestionInventario.Enums;
@@ -89,9 +90,26 @@ namespace SistemaGestionInventario.Pages.Transactions
             return new JsonResult(new { success = true });
         }
 
-        public async Task<IActionResult> OnGetTransactionTableAsync()
+        public async Task<IActionResult> OnGetTransactionTableAsync(string search, int type, int warehouseId, int state)
         {
-            var transactions = await _context.Transactions.Select(t => new TransactionDto
+            var transactionsQuery = _context.Transactions.AsQueryable();
+
+            if (type != -1)
+            {
+                transactionsQuery = transactionsQuery.Where(t => t.Type == type);
+            }
+
+            if (warehouseId != -1)
+            {
+                transactionsQuery = transactionsQuery.Where(t => t.WarehouseId == warehouseId);
+            }
+
+            if (state != -1)
+            {
+                transactionsQuery = transactionsQuery.Where(t => t.State == state);
+            }
+
+            var transactions = await transactionsQuery.Select(t => new TransactionDto
             {
                 Id = t.Id,
                 Type = t.Type,
@@ -113,10 +131,38 @@ namespace SistemaGestionInventario.Pages.Transactions
                 transactions[i].Warehouse = await _context.Warehouses.FirstOrDefaultAsync(a => a.Id == transactions[i].WarehouseId);
             }
 
+            if (!string.IsNullOrEmpty(search))
+            {
+                transactions = transactions.Where(t => t.Article.Name.Contains(search) || t.Warehouse.Name.Contains(search) || (t.Motive?.Contains(search) ?? false) || (t.Reference?.Contains(search) ?? false)).ToList();
+            }
+
             return new JsonResult(transactions);
         }
 
-        [HttpPost]
+        public async Task<IActionResult> OnGetTransactionAsync(int id)
+        {
+            var transaction = await _context.Transactions.Select(t => new TransactionDto
+            {
+                Id = t.Id,
+                Type = t.Type,
+                ArticleId = t.ArticleId,
+                WarehouseId = t.WarehouseId,
+                Amount = t.Amount,
+                UnitPrice = t.UnitPrice,
+                AdjustmentAmount = t.AdjustmentAmount,
+                Motive = t.Motive,
+                Reference = t.Reference,
+                Note = t.Note,
+                State = t.State,
+                Date = t.Date,
+            }).FirstOrDefaultAsync(t => t.Id == id);
+            
+            transaction.Article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == transaction.ArticleId);
+            transaction.Warehouse = await _context.Warehouses.FirstOrDefaultAsync(a => a.Id == transaction.WarehouseId);
+
+            return new JsonResult(transaction);
+        }
+
         public async Task<IActionResult> OnPostTransactionStateAsync(int id, int state)
         {
             var transaction = await _context.Transactions.FirstOrDefaultAsync(t => t.Id == id);
